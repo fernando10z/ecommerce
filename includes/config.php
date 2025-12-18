@@ -3,7 +3,7 @@
 define('SITE_NAME', 'ATELIER');
 define('SITE_URL', 'http://localhost/ecommerce');
 
-// Configuración de la base de datos (para futuro)
+// Configuración de la base de datos
 define('DB_HOST', 'mysql');
 define('DB_NAME', 'ecommerce');
 define('DB_USER', 'root');
@@ -28,13 +28,18 @@ $pages = [
     ],
     'hombre' => [
         'title' => 'Hombre',
-        'file' => 'men.php',
+        'file' => 'hombre.php',
         'nav' => true
     ],
     'sale' => [
         'title' => 'Sale',
         'file' => 'sale.php',
         'nav' => true
+    ],
+    'buscar' => [
+        'title' => 'Búsqueda',
+        'file' => 'search.php',
+        'nav' => false
     ]
 ];
 

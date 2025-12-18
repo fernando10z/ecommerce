@@ -416,21 +416,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    
-    // ==========================================
-    // SEARCH FUNCTIONALITY (Placeholder)
-    // ==========================================
-    
-    const searchIcon = document.querySelector('.nav-icon:first-child');
-    
-    if (searchIcon) {
-        searchIcon.addEventListener('click', function() {
-            // Aquí puedes abrir un modal de búsqueda
-            showNotification('Función de búsqueda próximamente', 'success');
-        });
-    }
-    
-    
     // ==========================================
     // ANIMATION ON SCROLL
     // ==========================================
@@ -458,6 +443,71 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 });
+
+
+// ==========================================
+// SEARCH MODAL FUNCTIONALITY
+// ==========================================
+
+const searchToggle = document.getElementById('searchToggle');
+const searchModal = document.getElementById('searchModal');
+const searchClose = document.getElementById('searchClose');
+const searchInput = document.querySelector('.search-modal .search-input');
+
+if (searchToggle && searchModal) {
+    // Abrir modal
+    searchToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        searchModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Focus en input después de animación
+        setTimeout(() => {
+            if (searchInput) searchInput.focus();
+        }, 300);
+    });
+    
+    // Cerrar con botón X
+    if (searchClose) {
+        searchClose.addEventListener('click', function() {
+            closeSearchModal();
+        });
+    }
+    
+    // Cerrar con click en overlay
+    const searchOverlay = document.querySelector('.search-modal-overlay');
+    if (searchOverlay) {
+        searchOverlay.addEventListener('click', function() {
+            closeSearchModal();
+        });
+    }
+    
+    // Cerrar con tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && searchModal.classList.contains('active')) {
+            closeSearchModal();
+        }
+    });
+}
+
+function closeSearchModal() {
+    if (searchModal) {
+        searchModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Prevenir envío de formulario vacío
+const searchForm = document.querySelector('.search-modal .search-form');
+if (searchForm) {
+    searchForm.addEventListener('submit', function(e) {
+        const input = this.querySelector('.search-input');
+        if (input && input.value.trim() === '') {
+            e.preventDefault();
+            input.focus();
+        }
+    });
+}
 
 
 // ==========================================

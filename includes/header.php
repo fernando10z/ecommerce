@@ -1,5 +1,4 @@
 <?php
-// Obtener páginas de navegación
 global $pages;
 ?>
 <header>
@@ -23,7 +22,7 @@ global $pages;
         </ul>
         
         <div class="nav-right">
-            <div class="nav-icon">
+            <div class="nav-icon search-toggle" id="searchToggle">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8"></circle>
                     <path d="m21 21-4.35-4.35"></path>
@@ -53,3 +52,37 @@ global $pages;
         </button>
     </nav>
 </header>
+
+<!-- Search Modal -->
+<div class="search-modal" id="searchModal">
+    <div class="search-modal-overlay"></div>
+    <div class="search-modal-content">
+        <button class="search-close" id="searchClose">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12"></path>
+            </svg>
+        </button>
+        <form class="search-form" action="index.php" method="GET">
+            <input type="hidden" name="page" value="buscar">
+            <div class="search-input-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" name="q" class="search-input" 
+                       placeholder="Buscar productos..." 
+                       autocomplete="off" autofocus>
+            </div>
+            <button type="submit" class="search-submit">Buscar</button>
+        </form>
+        <div class="search-suggestions">
+            <p class="suggestions-title">Búsquedas populares</p>
+            <div class="suggestions-tags">
+                <a href="index.php?page=buscar&q=vestido">Vestidos</a>
+                <a href="index.php?page=buscar&q=blazer">Blazers</a>
+                <a href="index.php?page=buscar&q=camisa">Camisas</a>
+                <a href="index.php?page=buscar&q=pantalon">Pantalones</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,59 +1,42 @@
-<section class="hero">
-    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&q=80" 
-         alt="Hero" class="hero-image">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <p class="hero-label">Primavera/Verano 2025</p>
-        <h1>La elegancia<br>redefinida</h1>
-        <p>Descubre nuestra nueva colección diseñada para la mujer 
-           y el hombre contemporáneo.</p>
-        <a href="index.php?page=nueva-coleccion" class="btn btn-light">
-            Explorar colección
-        </a>
+<section class="page-hero">
+    <img src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=1600&q=80" 
+         alt="Hombre" class="page-hero-image">
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+        <h1>Colección Hombre</h1>
+        <p>Estilo contemporáneo para el hombre moderno</p>
     </div>
 </section>
 
-<!-- CATEGORIES -->
-<section class="categories">
-    <div class="section-header">
-        <p class="section-label">Categorías</p>
-        <h2 class="section-title">Explora por estilo</h2>
+<section class="products">
+    <div class="products-container">
+        <div class="products-grid">
+            <?php
+            $productosHombre = [
+                ['nombre' => 'Blazer Estructurado', 'precio' => 320, 'marca' => 'Premium Line',
+                 'imagen' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80'],
+                ['nombre' => 'Camisa Oxford', 'precio' => 95, 'marca' => 'Essentials',
+                 'imagen' => 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&q=80'],
+                ['nombre' => 'Pantalón Chino', 'precio' => 110, 'marca' => 'Atelier',
+                 'imagen' => 'https://images.unsplash.com/photo-1624206112918-f140f087f9b5?w=600&q=80'],
+                ['nombre' => 'Suéter de Cashmere', 'precio' => 295, 'marca' => 'Warm',
+                 'imagen' => 'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&q=80'],
+            ];
+            
+            foreach ($productosHombre as $producto): ?>
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="<?php echo $producto['imagen']; ?>" 
+                         alt="<?php echo $producto['nombre']; ?>">
+                    <button class="quick-add">Agregar al carrito</button>
+                </div>
+                <div class="product-info">
+                    <p class="product-brand"><?php echo $producto['marca']; ?></p>
+                    <p class="product-name"><?php echo $producto['nombre']; ?></p>
+                    <p class="product-price">$<?php echo $producto['precio']; ?></p>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
     </div>
-    
-    <div class="categories-grid">
-        <a href="index.php?page=mujer" class="category-item category-large">
-            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&q=80" alt="Mujer">
-            <div class="category-overlay">
-                <h3>Colección Mujer</h3>
-                <span class="category-link">Ver todo →</span>
-            </div>
-        </a>
-        
-        <a href="index.php?page=hombre" class="category-item category-small">
-            <img src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=800&q=80" alt="Hombre">
-            <div class="category-overlay">
-                <h3>Colección Hombre</h3>
-                <span class="category-link">Ver todo →</span>
-            </div>
-        </a>
-        
-        <a href="index.php?page=sale" class="category-item category-small">
-            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80" alt="Sale">
-            <div class="category-overlay">
-                <h3>Sale</h3>
-                <span class="category-link">Ver ofertas →</span>
-            </div>
-        </a>
-    </div>
-</section>
-
-<!-- NEWSLETTER -->
-<section class="newsletter">
-    <h2>Únete a nuestra comunidad</h2>
-    <p>Recibe acceso anticipado a nuevas colecciones</p>
-    <form class="newsletter-form" method="POST" action="index.php?page=subscribe">
-        <input type="email" name="email" class="newsletter-input" 
-               placeholder="Tu correo electrónico" required>
-        <button type="submit" class="btn-newsletter">Suscribirse</button>
-    </form>
 </section>
