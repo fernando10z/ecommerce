@@ -28,7 +28,7 @@ $pages = [
     ],
     'hombre' => [
         'title' => 'Hombre',
-        'file' => 'hombre.php',
+        'file' => 'men.php',
         'nav' => true
     ],
     'sale' => [
