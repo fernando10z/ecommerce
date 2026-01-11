@@ -1,8 +1,8 @@
 <?php
-$host = "localhost";      
-$dbname = "ecommerce_crm";
+$host = "mysql";      
+$dbname = "system_ecommerce";
 $username = "root";        
-$password = "";           
+$password = "root";           
 
 try {
     // Crear conexión con PDO
