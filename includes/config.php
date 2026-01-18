@@ -1,6 +1,6 @@
 <?php
 // Configuración del sitio
-define('SITE_NAME', 'ATELIER');
+//define('SITE_NAME', 'ATELIER');
 define('SITE_URL', 'http://localhost/ecommerce');
 
 // Configuración de la base de datos

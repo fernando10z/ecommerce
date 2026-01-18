@@ -1,12 +1,14 @@
 <?php
 global $pages;
+// En tu index.php
+require_once __DIR__ . '/../System/configuracionlogico.php';
 ?>
 <header>
     <div class="top-banner">
         ENVÍO GRATIS EN COMPRAS SUPERIORES A $150 — NUEVAS LLEGADAS CADA SEMANA
     </div>
     <nav>
-        <a href="index.php" class="logo"><?php echo SITE_NAME; ?></a>
+        <a href="index.php" class="logo"><?php echo htmlspecialchars(SITE_NAME); ?></a>
         
         <ul class="nav-center">
             <?php foreach ($pages as $slug => $page): ?>

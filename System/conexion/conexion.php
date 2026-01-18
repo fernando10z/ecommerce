@@ -1,6 +1,7 @@
 <?php
 $host = "mysql";      
 $dbname = "system_ecommerce";
+//$dbname = "atelier_config";
 $username = "root";        
 $password = "root";           
 

@@ -1,5 +1,7 @@
 <?php
 require_once 'includes/config.php';
+require_once __DIR__ . '/System/configuracionlogico.php';
+
 
 $currentPage = getCurrentPage();
 
@@ -20,9 +22,9 @@ $pageFile = 'pages/' . $pages[$currentPage]['file'];
     <link rel="stylesheet" href="assets/css/styles.css">
     <style>
         :root {
-            --color-primary: #0a0a0a;
-            --color-secondary: #f8f7f4;
-            --color-accent: #b89968;
+            --color-primary: <?php echo htmlspecialchars($PRIMARY_COLOR); ?>;
+            --color-secondary: <?php echo htmlspecialchars($SECONDARY_COLOR); ?>;
+            --color-accent: <?php echo htmlspecialchars($ACCENT_COLOR); ?>;
             --color-text: #1a1a1a;
             --color-text-light: #757575;
             --color-border: #e5e5e5;
