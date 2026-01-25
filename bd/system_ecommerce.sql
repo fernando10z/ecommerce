@@ -180,7 +180,7 @@ CREATE TABLE `activity_types` (
   `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `color` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `category` enum('task','call','meeting','email','note','other') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `default_duration_minutes` int UNSIGNED DEFAULT NULL,
+  `SECONDARY_COLORduration_minutes` int UNSIGNED DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT '1',
   `sort_order` int DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -762,7 +762,7 @@ CREATE TABLE `custom_field_definitions` (
   `field_label` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `field_type` enum('text','textarea','number','decimal','date','datetime','boolean','select','multiselect','lookup','url','email','phone','formula','file','signature','geolocation') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `options` json DEFAULT NULL,
-  `default_value` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `SECONDARY_COLORvalue` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `placeholder` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `help_text` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `validation_rules` json DEFAULT NULL,
@@ -1431,9 +1431,9 @@ CREATE TABLE `organizations` (
   `logo_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `primary_color` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `secondary_color` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `default_language_id` int UNSIGNED DEFAULT NULL,
-  `default_currency_id` int UNSIGNED DEFAULT NULL,
-  `default_timezone_id` int UNSIGNED DEFAULT NULL,
+  `SECONDARY_COLORlanguage_id` int UNSIGNED DEFAULT NULL,
+  `SECONDARY_COLORcurrency_id` int UNSIGNED DEFAULT NULL,
+  `SECONDARY_COLORtimezone_id` int UNSIGNED DEFAULT NULL,
   `settings` json DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT '1',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1445,7 +1445,7 @@ CREATE TABLE `organizations` (
 -- Volcado de datos para la tabla `organizations`
 --
 
-INSERT INTO `organizations` (`id`, `uuid`, `name`, `slug`, `logo_url`, `primary_color`, `secondary_color`, `default_language_id`, `default_currency_id`, `default_timezone_id`, `settings`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `organizations` (`id`, `uuid`, `name`, `slug`, `logo_url`, `primary_color`, `secondary_color`, `SECONDARY_COLORlanguage_id`, `SECONDARY_COLORcurrency_id`, `SECONDARY_COLORtimezone_id`, `settings`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, '', 'CRM Pro', 'holi', 'assets/images/collab.png', '#10b981', '#059669', NULL, NULL, NULL, NULL, 1, '2026-01-01 22:43:57', '2026-01-11 21:43:26', NULL);
 
 -- --------------------------------------------------------
@@ -2341,12 +2341,12 @@ CREATE TABLE `store_settings` (
   `pinterest_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `business_hours` json DEFAULT NULL,
   `timezone_id` int UNSIGNED DEFAULT NULL,
-  `default_currency_id` int UNSIGNED DEFAULT NULL,
-  `default_tax_rate_id` int UNSIGNED DEFAULT NULL,
+  `SECONDARY_COLORcurrency_id` int UNSIGNED DEFAULT NULL,
+  `SECONDARY_COLORtax_rate_id` int UNSIGNED DEFAULT NULL,
   `prices_include_tax` tinyint(1) DEFAULT '0',
   `tax_calculation_method` enum('unit','line','total') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'line',
   `free_shipping_threshold` decimal(15,2) DEFAULT NULL,
-  `default_shipping_origin_address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `SECONDARY_COLORshipping_origin_address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `order_number_prefix` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'ORD-',
   `order_number_suffix` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `order_number_length` int UNSIGNED DEFAULT '6',
@@ -2484,7 +2484,7 @@ CREATE TABLE `theme_settings` (
   `is_active` tinyint(1) DEFAULT '1',
   `color_primary` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#0a0a0a',
   `color_secondary` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#f8f7f4',
-  `color_accent` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#b89968',
+  `color_tertiary` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#b89968',
   `color_text` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#1a1a1a',
   `color_text_light` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#757575',
   `color_border` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#e5e5e5',
@@ -2495,7 +2495,7 @@ CREATE TABLE `theme_settings` (
   `color_error` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#dc3545',
   `color_info` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#17a2b8',
   `color_primary_hover` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `color_accent_hover` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `color_tertiary_hover` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `color_button_text` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#ffffff',
   `color_link` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `color_link_hover` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -2653,7 +2653,7 @@ CREATE TABLE `ticket_categories` (
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `default_queue_id` int UNSIGNED DEFAULT NULL,
+  `SECONDARY_COLORqueue_id` int UNSIGNED DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT '1',
   `sort_order` int DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -2716,8 +2716,8 @@ CREATE TABLE `ticket_queues` (
   `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `email_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `default_priority` enum('low','normal','high','urgent') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'normal',
-  `default_sla_id` int UNSIGNED DEFAULT NULL,
+  `SECONDARY_COLORpriority` enum('low','normal','high','urgent') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'normal',
+  `SECONDARY_COLORsla_id` int UNSIGNED DEFAULT NULL,
   `manager_id` bigint UNSIGNED DEFAULT NULL,
   `auto_assign` tinyint(1) DEFAULT '0',
   `assignment_method` enum('round_robin','load_balanced','manual') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'manual',
@@ -3460,9 +3460,9 @@ ALTER TABLE `organizations`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uk_uuid` (`uuid`),
   ADD UNIQUE KEY `uk_slug` (`slug`),
-  ADD KEY `default_language_id` (`default_language_id`),
-  ADD KEY `default_currency_id` (`default_currency_id`),
-  ADD KEY `default_timezone_id` (`default_timezone_id`),
+  ADD KEY `SECONDARY_COLORlanguage_id` (`SECONDARY_COLORlanguage_id`),
+  ADD KEY `SECONDARY_COLORcurrency_id` (`SECONDARY_COLORcurrency_id`),
+  ADD KEY `SECONDARY_COLORtimezone_id` (`SECONDARY_COLORtimezone_id`),
   ADD KEY `idx_active` (`is_active`);
 
 --
@@ -3802,8 +3802,8 @@ ALTER TABLE `store_settings`
   ADD UNIQUE KEY `uk_organization` (`organization_id`),
   ADD KEY `country_id` (`country_id`),
   ADD KEY `timezone_id` (`timezone_id`),
-  ADD KEY `default_currency_id` (`default_currency_id`),
-  ADD KEY `default_tax_rate_id` (`default_tax_rate_id`),
+  ADD KEY `SECONDARY_COLORcurrency_id` (`SECONDARY_COLORcurrency_id`),
+  ADD KEY `SECONDARY_COLORtax_rate_id` (`SECONDARY_COLORtax_rate_id`),
   ADD KEY `created_by` (`created_by`),
   ADD KEY `updated_by` (`updated_by`);
 
@@ -3899,7 +3899,7 @@ ALTER TABLE `tickets` ADD FULLTEXT KEY `ft_search` (`subject`,`description`);
 ALTER TABLE `ticket_categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uk_org_code` (`organization_id`,`code`),
-  ADD KEY `default_queue_id` (`default_queue_id`),
+  ADD KEY `SECONDARY_COLORqueue_id` (`SECONDARY_COLORqueue_id`),
   ADD KEY `idx_parent` (`parent_id`);
 
 --
@@ -4963,9 +4963,9 @@ ALTER TABLE `order_status_history`
 -- Filtros para la tabla `organizations`
 --
 ALTER TABLE `organizations`
-  ADD CONSTRAINT `organizations_ibfk_1` FOREIGN KEY (`default_language_id`) REFERENCES `languages` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `organizations_ibfk_2` FOREIGN KEY (`default_currency_id`) REFERENCES `currencies` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `organizations_ibfk_3` FOREIGN KEY (`default_timezone_id`) REFERENCES `timezones` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `organizations_ibfk_1` FOREIGN KEY (`SECONDARY_COLORlanguage_id`) REFERENCES `languages` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `organizations_ibfk_2` FOREIGN KEY (`SECONDARY_COLORcurrency_id`) REFERENCES `currencies` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `organizations_ibfk_3` FOREIGN KEY (`SECONDARY_COLORtimezone_id`) REFERENCES `timezones` (`id`) ON DELETE SET NULL;
 
 --
 -- Filtros para la tabla `payments`
@@ -5231,8 +5231,8 @@ ALTER TABLE `store_settings`
   ADD CONSTRAINT `store_settings_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `store_settings_ibfk_2` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `store_settings_ibfk_3` FOREIGN KEY (`timezone_id`) REFERENCES `timezones` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `store_settings_ibfk_4` FOREIGN KEY (`default_currency_id`) REFERENCES `currencies` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `store_settings_ibfk_5` FOREIGN KEY (`default_tax_rate_id`) REFERENCES `tax_rates` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `store_settings_ibfk_4` FOREIGN KEY (`SECONDARY_COLORcurrency_id`) REFERENCES `currencies` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `store_settings_ibfk_5` FOREIGN KEY (`SECONDARY_COLORtax_rate_id`) REFERENCES `tax_rates` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `store_settings_ibfk_6` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `store_settings_ibfk_7` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
@@ -5310,7 +5310,7 @@ ALTER TABLE `tickets`
 ALTER TABLE `ticket_categories`
   ADD CONSTRAINT `ticket_categories_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `ticket_categories_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `ticket_categories` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `ticket_categories_ibfk_3` FOREIGN KEY (`default_queue_id`) REFERENCES `ticket_queues` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `ticket_categories_ibfk_3` FOREIGN KEY (`SECONDARY_COLORqueue_id`) REFERENCES `ticket_queues` (`id`) ON DELETE SET NULL;
 
 --
 -- Filtros para la tabla `ticket_comments`

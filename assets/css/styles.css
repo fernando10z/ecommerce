@@ -3,7 +3,7 @@
 :root {
     --color-primary: #0a0a0a;
     --color-secondary: #f8f7f4;
-    --color-accent: #b89968;
+    --color-tertiary: #b89968;
     --color-text: #1a1a1a;
     --color-text-light: #757575;
     --color-border: #e5e5e5;
@@ -48,7 +48,7 @@ header {
 
 .top-banner {
     background: var(--color-secondary);
-    color: var(--color-white);
+    color: var(--color-text);
     text-align: center;
     padding: calc(var(--spacing) * 1.5);
     font-size: 0.75rem;
@@ -82,7 +82,7 @@ nav {
 }
 
 .nav-center a {
-    color: var(--color-text);
+    color: var(--color-white);
     text-decoration: none;
     font-size: 0.8rem;
     font-weight: 400;
@@ -101,13 +101,13 @@ nav {
     transform: translateX(-50%) scaleX(0);
     width: 100%;
     height: 2px;
-    background: var(--color-accent);
+    background: var(--color-tertiary);
     transition: transform var(--transition);
 }
 
 .nav-center a:hover,
 .nav-center a.active {
-    color: var(--color-accent);
+    color: var(--color-tertiary);
 }
 
 .nav-center a:hover::before,
@@ -126,6 +126,7 @@ nav {
     height: 22px;
     cursor: pointer;
     transition: opacity var(--transition);
+    color: var(--color-white);
     position: relative;
 }
 
@@ -286,7 +287,7 @@ nav {
 
 .sale-discount {
     font-size: 2rem;
-    color: var(--color-accent);
+    color: var(--color-tertiary);
     margin-bottom: calc(var(--spacing) * 2);
 }
 
@@ -317,8 +318,8 @@ nav {
 }
 
 .btn-light:hover {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: var(--color-tertiary);
+    border-color: var(--color-tertiary);
     color: var(--color-white);
 }
 
@@ -329,8 +330,8 @@ nav {
 }
 
 .btn-dark:hover {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: var(--color-tertiary);
+    border-color: var(--color-tertiary);
 }
 
 /* ==========================================
@@ -357,7 +358,7 @@ nav {
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--color-accent);
+    color: var(--color-tertiary);
     margin-bottom: calc(var(--spacing) * 2);
     font-weight: 500;
 }
@@ -696,9 +697,9 @@ nav {
 }
 
 .btn-newsletter {
-    background: var(--color-accent);
+    background: var(--color-tertiary);
     color: var(--color-white);
-    border: 1px solid var(--color-accent);
+    border: 1px solid var(--color-tertiary);
     padding: calc(var(--spacing) * 2.5) calc(var(--spacing) * 5);
     font-size: 0.8rem;
     letter-spacing: 0.1em;
@@ -831,12 +832,12 @@ nav {
 
 .search-input:focus {
     outline: none;
-    border-color: var(--color-accent);
+    border-color: var(--color-tertiary);
 }
 
 .search-submit {
     padding: 16px 32px;
-    background: var(--color-accent);
+    background: var(--color-tertiary);
     color: #fff;
     border: none;
     font-size: 0.85rem;
@@ -882,7 +883,7 @@ nav {
 }
 
 .suggestions-tags a:hover {
-    background: var(--color-accent);
+    background: var(--color-tertiary);
 }
 
 /* ==========================================
@@ -955,7 +956,7 @@ nav {
 }
 
 .inline-search-btn:hover {
-    background: var(--color-accent);
+    background: var(--color-tertiary);
 }
 
 .search-empty {
@@ -1098,7 +1099,7 @@ nav {
 }
 
 .inline-search-btn:hover {
-    background: var(--color-accent);
+    background: var(--color-tertiary);
 }
 
 .search-empty {
@@ -1248,6 +1249,143 @@ footer {
 .payment-methods {
     display: flex;
     gap: calc(var(--spacing) * 3);
+}
+
+/* --- Estilos del Modal de Usuario --- */
+.user-dropdown-container {
+    position: relative; 
+}
+
+/* --- Estilos del Modal de Usuario --- */
+.user-modal {
+    display: none;
+    position: absolute;
+    top: calc(100% + 15px); /* Añade un pequeño margen hacia abajo */
+    right: -10px; 
+    width: 280px;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* Sombra más pronunciada para dar profundidad */
+    z-index: 2000; /* Aumentado para superar cualquier otro elemento */
+    padding: 20px;
+    cursor: default;
+    text-align: left;
+    border-radius: 4px; /* Un poco de redondeo para que no se vea tan rígido */
+}
+
+/* --- CORRECCIONES FINALES --- */
+
+/* 1. Evitar el desvanecimiento gris */
+.nav-icon:hover .user-modal {
+    opacity: 1 !important;
+    filter: none !important;
+}
+
+/* 2. Asegurar que el modal no se mueva con el hover del icono */
+.user-dropdown-container:hover {
+    opacity: 1;
+}
+
+.user-modal, .user-content {
+    color: var(--color-primary) !important; /* Fuerza el color oscuro para los textos del modal */
+}
+
+.user-modal h4 {
+    color: var(--color-primary);
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 10px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.user-modal.active {
+    display: block;
+    animation: fadeInModal 0.3s ease-out;
+}
+
+.user-content h4 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    color: var(--color-primary);
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 12px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+    box-sizing: border-box; /* Evita que el padding ensanche el input fuera del modal */
+    background-color: #fff;
+}
+
+.input-group input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.btn-full {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 500;
+    border: none;
+    transition: var(--transition);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-tertiary); /* Efecto hover elegante */
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-footer {
+    margin-top: 16px;
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--color-text-light);
+}
+
+.modal-footer a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.welcome-text {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==========================================

@@ -1,9 +1,13 @@
+<?php
+global $pages;
+// En tu index.php
+require_once __DIR__ . '/../System/apariencia/design-config.php';
+?>
 <footer>
     <div class="footer-content">
         <div class="footer-brand">
-            <h3><?php echo SITE_NAME; ?></h3>
-            <p>Redefiniendo la elegancia contemporánea desde 2020. 
-               Cada pieza es diseñada pensando en la atemporalidad.</p>
+            <h3><?php echo htmlspecialchars($SITE_NAME); ?></h3>
+            <p><?php echo nl2br(htmlspecialchars($FOOTER_DESCRIPTION)); ?></p>
         </div>
         
         <div class="footer-section">
@@ -41,7 +45,7 @@
     </div>
     
     <div class="footer-bottom">
-        <p>© <?php echo date('Y'); ?> <?php echo SITE_NAME; ?>. 
+        <p>© <?php echo date('Y'); ?> <?php echo $SITE_NAME; ?>. 
            Todos los derechos reservados.</p>
         <div class="payment-methods">
             <span>Visa</span>

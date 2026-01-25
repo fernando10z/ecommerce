@@ -68,7 +68,7 @@ if (isset($conn) && $conn instanceof PDO) {
                 </div>
                 <div class="nav-submenu">
                     <a href="contacts.php" class="nav-subitem"><span>Personas</span></a>
-                    <a href="empresas.php" class="nav-subitem"><span>Empresas</span></a>
+                    <a href="businnes.php" class="nav-subitem"><span>Empresas</span></a>
                 </div>
                 
                 <!-- Leads & Oportunidades (Pipeline) -->
@@ -182,6 +182,41 @@ if (isset($conn) && $conn instanceof PDO) {
                 </a>
             </div>
         </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Pagina Web</div>
+            <div class="nav-items">
+                <a href="design-system.php" class="nav-item <?php echo basename($_SERVER['PHP_SELF']) === 'design-system.php' ? 'active' : ''; ?>">
+                    <i class="nav-icon fas fa-folder-open"></i>
+                    <span class="nav-label">Diseño</span>
+                </a>
+
+                <a href="home-system.php" class="nav-item <?php echo basename($_SERVER['PHP_SELF']) === 'home-system.php' ? 'active' : ''; ?>">
+                    <i class="nav-icon fas fa-folder-open"></i>
+                    <span class="nav-label">Inicio</span>
+                </a>
+                
+                <a href="newcollection-system.php" class="nav-item <?php echo basename($_SERVER['PHP_SELF']) === 'newcollection-system.php' ? 'active' : ''; ?>">
+                    <i class="nav-icon fas fa-chart-bar"></i>
+                    <span class="nav-label">Nueva Colección</span>
+                </a>
+                
+                <a href="men-system.php" class="nav-item <?php echo basename($_SERVER['PHP_SELF']) === 'men-system.php' ? 'active' : ''; ?>">
+                    <i class="nav-icon fas fa-cog"></i>
+                    <span class="nav-label">Hombres</span>
+                </a>
+
+                <a href="women-system.php" class="nav-item <?php echo basename($_SERVER['PHP_SELF']) === 'women-system.php' ? 'active' : ''; ?>">
+                    <i class="nav-icon fas fa-cog"></i>
+                    <span class="nav-label">Mujeres</span>
+                </a>
+
+                <a href="sales-system.php" class="nav-item <?php echo basename($_SERVER['PHP_SELF']) === 'sales-system.php' ? 'active' : ''; ?>">
+                    <i class="nav-icon fas fa-cog"></i>
+                    <span class="nav-label">Sales</span>
+                </a>
+            </div>
+        </div>
     </nav>
     
     <div class="sidebar-footer">
@@ -197,3 +232,19 @@ if (isset($conn) && $conn instanceof PDO) {
         </div>
     </div>
 </aside>
+
+<script>
+    // Toggle submenu
+    function toggleSubmenu(element) {
+        const submenu = element.nextElementSibling;
+        const isOpen = element.classList.contains('open');
+        
+        if (isOpen) {
+            element.classList.remove('open');
+            submenu.classList.remove('open');
+        } else {
+            element.classList.add('open');
+            submenu.classList.add('open');
+        }
+    }
+</script>
