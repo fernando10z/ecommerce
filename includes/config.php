@@ -23,7 +23,7 @@ $pages = [
     ],
     'mujer' => [
         'title' => 'Mujer',
-        'file' => 'woman.php',
+        'file' => 'women.php',
         'nav' => true
     ],
     'hombre' => [

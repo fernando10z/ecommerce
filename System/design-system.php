@@ -640,11 +640,11 @@ $usuario = [
                     Apariencia del Sistema
                 </h1>
                 <div class="page-actions" style="display: flex; align-items: center; gap: 10px;">
-                    <button type="submit" form="configForm" name="btn_guardar_global" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem;">
+                    <button type="submit" form="configForm" name="btn_guardar_global" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem;" onclick="confirmarAccion(event, this)" title="Guardar TODA la configuración">
                         <i class="fas fa-save"></i> Guardar Todo
                     </button>
                     
-                    <button type="submit" form="configForm" name="btn_reiniciar" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem; background-color: #fee2e2; color: #dc2626;" onclick="return confirm('¿Estás seguro de reiniciar TODA la configuración a los valores por defecto?');">
+                    <button type="submit" form="configForm" name="btn_reiniciar" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem; background-color: #fee2e2; color: #dc2626;" onclick="confirmarAccion(event, this)" title="Reiniciar TODA la configuración">
                         <i class="fas fa-undo"></i> Reiniciar Todo
                     </button>
                 </div>
@@ -695,8 +695,8 @@ $usuario = [
                                     </td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_logo" class="btn-action btn-save" title="Guardar"><i class="fas fa-save"></i></button>
-                                            <button type="submit" name="btn_reset_nombre" class="btn-action btn-reset" title="Restablecer" onclick="return confirm('¿Restablecer nombre?')"><i class="fas fa-undo"></i></button>
+                                            <button type="submit" name="btn_save_logo" class="btn-action btn-save" title="Guardar cambios" onclick="confirmarAccion(event, this)"><i class="fas fa-save"></i></button>
+                                            <button type="submit" name="btn_reset_nombre" class="btn-action btn-reset" title="Restablecer nombre" onclick="confirmarAccion(event, this)"><i class="fas fa-undo"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -723,8 +723,8 @@ $usuario = [
                                     <td><?php echo ($datos_actuales['primary_color'] !== PRIMARY_COLOR) ? '<span class="badge badge-active">Personalizado</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_primary" class="btn-action btn-save" title="Guardar"><i class="fas fa-save"></i></button>
-                                            <button type="submit" name="btn_reset_primary" class="btn-action btn-reset" title="Restablecer" onclick="return confirm('¿Restablecer color primario?')"><i class="fas fa-undo"></i></button>
+                                            <button type="submit" name="btn_save_primary" class="btn-action btn-save" title="Guardar cambios" onclick="confirmarAccion(event, this)"><i class="fas fa-save"></i></button>
+                                            <button type="submit" name="btn_reset_primary" class="btn-action btn-reset" title="Restablecer nombre" onclick="confirmarAccion(event, this)"><i class="fas fa-undo"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -749,8 +749,8 @@ $usuario = [
                                     <td><?php echo ($datos_actuales['secondary_color'] !== SECONDARY_COLOR) ? '<span class="badge badge-active">Personalizado</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_secondary" class="btn-action btn-save" title="Guardar"><i class="fas fa-save"></i></button>
-                                            <button type="submit" name="btn_reset_secondary" class="btn-action btn-reset" title="Restablecer" onclick="return confirm('¿Restablecer color secundario?')"><i class="fas fa-undo"></i></button>
+                                            <button type="submit" name="btn_save_secondary" class="btn-action btn-save" title="Guardar cambios" onclick="confirmarAccion(event, this)"><i class="fas fa-save"></i></button>
+                                            <button type="submit" name="btn_reset_secondary" class="btn-action btn-reset" title="Restablecer nombre" onclick="confirmarAccion(event, this)"><i class="fas fa-undo"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -775,8 +775,8 @@ $usuario = [
                                     <td><?php echo ($datos_actuales['tertiary_color'] !== TERTIARY_COLOR) ? '<span class="badge badge-active">Personalizado</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_tertiary" class="btn-action btn-save" title="Guardar"><i class="fas fa-save"></i></button>
-                                            <button type="submit" name="btn_reset_tertiary" class="btn-action btn-reset" title="Restablecer" onclick="return confirm('¿Restablecer color terciario?')"><i class="fas fa-undo"></i></button>
+                                            <button type="submit" name="btn_save_tertiary" class="btn-action btn-save" title="Guardar cambios" onclick="confirmarAccion(event, this)"><i class="fas fa-save"></i></button>
+                                            <button type="submit" name="btn_reset_tertiary" class="btn-action btn-reset" title="Restablecer nombre" onclick="confirmarAccion(event, this)"><i class="fas fa-undo"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -808,8 +808,8 @@ $usuario = [
                                     <td><?php echo ($datos_actuales['font_style'] !== 'elegante') ? '<span class="badge badge-active">Personalizado</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_font" class="btn-action btn-save" title="Guardar"><i class="fas fa-save"></i></button>
-                                            <button type="submit" name="btn_reset_font" class="btn-action btn-reset" title="Restablecer" onclick="return confirm('¿Restablecer fuente de letra?')"><i class="fas fa-undo"></i></button>
+                                            <button type="submit" name="btn_save_font" class="btn-action btn-save" title="Guardar cambios" onclick="confirmarAccion(event, this)"><i class="fas fa-save"></i></button>
+                                            <button type="submit" name="btn_reset_font" class="btn-action btn-reset" title="Restablecer nombre" onclick="confirmarAccion(event, this)"><i class="fas fa-undo"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -834,9 +834,26 @@ $usuario = [
                                     </td>
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
-                                        <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_banner" class="btn-action btn-save" title="Guardar"><i class="fas fa-save"></i></button>
-                                            <button type="submit" name="btn_reset_banner" class="btn-action btn-reset" title="Restablecer" onclick="return confirm('¿Restablecer banner?')"><i class="fas fa-undo"></i></button>
+                                        <div class="row-actions" style="justify-content: flex-end; display: flex; align-items: center;">
+                                            
+                                            <input type="checkbox" id="chk_banner_visible" name="banner_visible" value="1" style="display: none;"
+                                                <?php echo (isset($datos_actuales['banner_visible']) && $datos_actuales['banner_visible'] == 1) ? 'checked' : ''; ?>>
+
+                                            <button type="button" id="btn_toggle_eye" class="btn-action" style="margin-right: 10px;" onclick="toggleBanner(event)" title="Cambiar visibilidad">
+                                                <?php if (isset($datos_actuales['banner_visible']) && $datos_actuales['banner_visible'] == 1): ?>
+                                                    <i class="fas fa-eye" style="color: green;"></i>
+                                                <?php else: ?>
+                                                    <i class="fas fa-eye-slash" style="color: red;"></i>
+                                                <?php endif; ?>
+                                            </button>
+
+                                            <button type="submit" name="btn_save_banner" class="btn-action btn-save" title="Guardar cambios" onclick="confirmarAccion(event, this)">
+                                                <i class="fas fa-save"></i>
+                                            </button>
+                                            
+                                            <button type="submit" name="btn_reset_banner" class="btn-action btn-reset" title="Restablecer" onclick="confirmarAccion(event, this)">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -862,8 +879,8 @@ $usuario = [
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_footer_desc" class="btn-action btn-save" title="Guardar"><i class="fas fa-save"></i></button>
-                                            <button type="submit" name="btn_reset_footer_desc" class="btn-action btn-reset" title="Restablecer" onclick="return confirm('¿Restablecer footer?')"><i class="fas fa-undo"></i></button>
+                                            <button type="submit" name="btn_save_footer_desc" class="btn-action btn-save" title="Guardar cambios" onclick="confirmarAccion(event, this)"><i class="fas fa-save"></i></button>
+                                            <button type="submit" name="btn_reset_footer_desc" class="btn-action btn-reset" title="Restablecer nombre" onclick="confirmarAccion(event, this)"><i class="fas fa-undo"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -874,19 +891,90 @@ $usuario = [
             </form>
     </main>
 </div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Pequeño script para simular interactividad de la UI Pro
+        // Configuración compartida de SweetAlert (Estética unificada)
+        const swalEstilo = {
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#10b981', // Tu color verde/esmeralda
+            cancelButtonColor: '#6b7280', // Gris para cancelar
+            confirmButtonText: 'Sí, continuar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true,
+            focusCancel: true
+        };
+
+        // 1. EFECTO VISUAL (Animación de pulsación para todos los botones)
         document.querySelectorAll('.btn-action').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                // Si es un botón submit real, dejamos que pase. 
-                // Esto es solo para feedback visual instantáneo
-                if(!this.getAttribute('onclick')) {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => this.style.transform = 'scale(1)', 150);
-                }
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => this.style.transform = 'scale(1)', 150);
             });
         });
+
+        // 2. FUNCIÓN PARA BOTONES PHP (Guardar, Eliminar, Resetear)
+        // Esta es la que usan tus otros botones. Es compatible 100%.
+        function confirmarAccion(e, boton) {
+            if (e) e.preventDefault(); // Detiene el envío automático
+            
+            // Obtiene datos del botón automáticamente
+            const accion = boton.getAttribute('title') || 'realizar acción';
+            const name = boton.getAttribute('name'); // Vital para el PHP
+            const form = boton.form;
+
+            if (!form) return; // Seguridad si no hay formulario
+
+            Swal.fire({
+                ...swalEstilo,
+                title: `¿${accion}?`,
+                text: "Esta acción actualizará la configuración."
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading(); // Feedback visual de carga
+
+                    // TRUCO VITAL: Crear input oculto para que PHP detecte el botón
+                    if (name) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = name;
+                        input.value = '1';
+                        form.appendChild(input);
+                    }
+                    
+                    form.submit(); // Envío manual
+                }
+            });
+        }
+
+        // 3. FUNCIÓN EXCLUSIVA PARA EL OJO (Solo visual, no envía form)
+        function toggleBanner(e) {
+    if (e) e.preventDefault();
+
+    Swal.fire({
+        ...swalEstilo,
+        title: '¿Cambiar visibilidad?',
+        text: 'El banner se mostrará u ocultará en la web inmediatamente.'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const chk = document.getElementById('chk_banner_visible');
+            const form = document.getElementById('configForm');
+
+            // 1. Cambiamos el estado del checkbox
+            chk.checked = !chk.checked; 
+
+            // 2. Creamos el input oculto para que PHP detecte que pulsamos "btn_save_banner"
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'btn_save_banner';
+            input.value = '1';
+            form.appendChild(input);
+
+            // 3. Enviamos el formulario
+            form.submit();
+        }
+    });
+}
     </script>
 </body>
 </html>

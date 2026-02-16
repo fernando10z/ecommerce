@@ -56,7 +56,7 @@ $heroImage = validarImagen(
     $config['image_background'] ?? '', 
     $rutaFisicaBase, 
     $rutaWeb, 
-    'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1200'
+    'https://images.unsplash.com/photo-1532106806998-abe7a5989beb?w=1600&q=80'
 );
 
 // B) CATEGORÍA MUJER

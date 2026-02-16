@@ -21,6 +21,13 @@ if (!$org) {
     $org = array_merge(['name' => 'CRM Pro', 'logo_url' => 'assets/images/collab.png'], $defaults);
 }
 
+// Asignamos las variables directo de la consulta de diseño (men-config.php)
+$men_data = [
+    'hero_title'    => $design_data['hero_titulo'] ?? '',
+    'hero_subtitle' => $design_data['hero_subtitulo'] ?? '',
+    'hero_image'    => $design_data['hero_imagen'] ?? ''
+];
+
 // Función helper
 function getStatusBadge($current, $default) {
     if ($current !== $default && !empty($current)) {
@@ -498,6 +505,7 @@ $usuario = [
             border: 1px solid var(--gray-200);
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 2rem; /* Agregado espacio entre cards */
         }
         
         .card-header {
@@ -638,6 +646,11 @@ $usuario = [
                 <h1 class="page-title">
                     <i class="fas fa-tshirt"></i> Gestión de Productos Hombre
                 </h1>
+                <div class="page-actions" style="display: flex; align-items: center; gap: 10px;">
+                    <button type="submit" form="menConfigForm" name="btn_save_global" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem;" onclick="confirmarAccion(event, this)" title="Guardar TODA la configuración">
+                        <i class="fas fa-save"></i> Guardar Todo
+                    </button>
+                </div>
             </div>
 
             <?php if (!empty($mensaje)): ?>
@@ -648,6 +661,113 @@ $usuario = [
             <?php endif; ?>
 
             <form id="menConfigForm" method="POST" action="" enctype="multipart/form-data">
+                <div class="card">                  
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th width="30%">Elemento Apariencia</th>
+                                    <th width="30%">Valor</th>
+                                    <th width="20%">Previsualización</th>
+                                    <th width="10%">Estado</th>
+                                    <th width="10%" style="text-align: right; padding-right: 1.5rem;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background-color: #f9fafb;"><td colspan="5" style="padding: 0.5rem 1rem; font-weight:bold; color:var(--primary); font-size:0.8rem;">SECCIÓN HERO (SUPERIOR)</td></tr>
+                                
+                                <tr>
+                                    <td>
+                                        <div class="config-cell">
+                                            <div class="config-icon"><i class="fas fa-heading"></i></div>
+                                            <div class="config-info">
+                                                <div>Título Principal</div>
+                                                <div>Ej: Colección Hombre</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <textarea class="table-input" name="hero_title" rows="2"><?php echo htmlspecialchars($men_data['hero_title'] ?? ''); ?></textarea>
+                                    </td>
+                                    <td><strong><?php echo htmlspecialchars($men_data['hero_title'] ?? ''); ?></strong></td>
+                                    <td><span class="badge badge-active">Texto</span></td>
+                                    <td>
+                                        <div class="row-actions" style="justify-content: flex-end;">
+                                            <button type="submit" name="btn_save_hero_title" class="btn-action btn-save" title="Guardar título" onclick="confirmarAccion(event, this)">
+                                                <i class="fas fa-save"></i>
+                                            </button>
+                                            <button type="submit" name="btn_del_hero_title" class="btn-action btn-reset" title="Borrar título" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="config-cell">
+                                            <div class="config-icon"><i class="fas fa-align-left"></i></div>
+                                            <div class="config-info">
+                                                <div>Descripción Corta</div>
+                                                <div>Ej: Estilo contemporáneo...</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <textarea class="table-input" name="hero_subtitle" rows="2"><?php echo htmlspecialchars($men_data['hero_subtitle'] ?? ''); ?></textarea>
+                                    </td>
+                                    <td><small><?php echo htmlspecialchars($men_data['hero_subtitle'] ?? ''); ?></small></td>
+                                    <td><span class="badge badge-active">Texto</span></td>
+                                    <td>
+                                        <div class="row-actions" style="justify-content: flex-end;">
+                                            <button type="submit" name="btn_save_hero_sub" class="btn-action btn-save" title="Guardar descripción" onclick="confirmarAccion(event, this)">
+                                                <i class="fas fa-save"></i>
+                                            </button>
+                                            <button type="submit" name="btn_del_hero_sub" class="btn-action btn-reset" title="Borrar descripción" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="config-cell">
+                                            <div class="config-icon"><i class="fas fa-image"></i></div>
+                                            <div class="config-info">
+                                                <div>Banner Fondo</div>
+                                                <div>Imagen grande superior</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="file" class="table-input" name="hero_image" accept="image/*" style="padding: 0.3rem;">
+                                    </td>
+                                    <td>
+                                        <?php if (!empty($men_data['hero_image'])): ?>
+                                            <img src="../<?php echo htmlspecialchars($men_data['hero_image']); ?>" style="width: 60px; height: 30px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
+                                        <?php else: ?>
+                                            <span style="font-size: 0.75rem; color: var(--gray-400);">Sin imagen</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?php echo !empty($men_data['hero_image']) ? '<span class="badge badge-active">Cargada</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
+                                    <td>
+                                        <div class="row-actions" style="justify-content: flex-end;">
+                                            <button type="submit" name="btn_save_hero_img" class="btn-action btn-save" title="Subir imagen" onclick="confirmarAccion(event, this)">
+                                                <i class="fas fa-upload"></i>
+                                            </button>
+                                            <?php if (!empty($men_data['hero_image'])): ?>
+                                            <button type="submit" name="btn_del_hero_img" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <div class="card">                  
                     <div class="table-responsive">
                         <table class="data-table">
@@ -687,8 +807,8 @@ $usuario = [
                                     </td>
                                 </tr>
 
-                                <?php if (count($productos_list) > 0): ?>
-                                    <?php foreach ($productos_list as $prod): ?>
+                                <?php if (count($products_list) > 0): ?>
+                                    <?php foreach ($products_list as $prod): ?>
                                     <tr>
                                         <td>
                                             <div class="config-cell">
@@ -726,7 +846,7 @@ $usuario = [
                 </div>
             </form>
             
-            <?php foreach ($productos_list as $prod): ?>
+            <?php foreach ($products_list as $prod): ?>
                 <form id="form_del_<?php echo $prod['id']; ?>" method="POST" style="display:none;"></form>
             <?php endforeach; ?>
 
@@ -734,18 +854,56 @@ $usuario = [
     </main>
     </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        // Pequeño script para simular interactividad de la UI Pro
+        // 1. Feedback visual de escala
         document.querySelectorAll('.btn-action').forEach(btn => {
             btn.addEventListener('click', function(e) {
-                // Si es un botón submit real, dejamos que pase. 
-                // Esto es solo para feedback visual instantáneo
-                if(!this.getAttribute('onclick')) {
+                // Si es un botón submit normal que no usa SweetAlert, dejamos pasar
+                if(!this.getAttribute('onclick') || this.getAttribute('onclick').includes('return confirm')) {
                     this.style.transform = 'scale(0.95)';
                     setTimeout(() => this.style.transform = 'scale(1)', 150);
                 }
             });
         });
+
+        // 2. Función global de confirmación
+        function confirmarAccion(e, boton) {
+            if (e) e.preventDefault();
+            
+            const accion = boton.getAttribute('title') || 'realizar esta acción';
+            const name = boton.getAttribute('name');
+            const form = boton.form;
+
+            if (!form) {
+                console.error("Error: El botón no pertenece a ningún formulario.");
+                return;
+            }
+
+            Swal.fire({
+                title: `¿${accion}?`,
+                text: "Esta acción actualizará la sección Men.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--primary)', 
+                cancelButtonColor: '#6b7280', 
+                confirmButtonText: 'Sí, continuar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+                focusCancel: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = name;
+                    hiddenInput.value = '1';
+                    form.appendChild(hiddenInput);
+                    form.submit();
+                }
+            });
+        }
     </script>
 </body>
 </html>

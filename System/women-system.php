@@ -1,14 +1,14 @@
 <?php
 session_start();
 require_once 'conexion/conexion.php';
-require_once __DIR__ . '/apariencia/newcollection-config.php';
+require_once __DIR__ . '/apariencia/women-config.php';
 
 // Obtener datos de la organización
 $stmt = $conn->prepare("SELECT * FROM organizations LIMIT 1");
 $stmt->execute();
 $org = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Valores por defecto para comparación (Lógica Pro para los Badges)
+// Valores por defecto
 $defaults = [
     'primary_color' => '#10b981',
     'secondary_color' => '#059669',
@@ -20,7 +20,14 @@ if (!$org) {
     $org = array_merge(['name' => 'CRM Pro', 'logo_url' => 'assets/images/collab.png'], $defaults);
 }
 
-// Función helper para determinar estado (Simulación visual)
+// Asignamos las variables directo de la consulta de diseño (women-config.php)
+$women_datos = [
+    'hero_title'    => $design_data['hero_titulo'] ?? '',
+    'hero_subtitle' => $design_data['hero_subtitulo'] ?? '',
+    'hero_image'    => $design_data['hero_imagen'] ?? ''
+];
+
+// Función helper
 function getStatusBadge($current, $default) {
     if ($current !== $default && !empty($current)) {
         return '<span class="badge badge-active">Personalizado</span>';
@@ -40,7 +47,7 @@ $usuario = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="<?php echo $org['logo_url']; ?>" type="image/png">
-    <title>Configuración | <?php echo htmlspecialchars($org['name']); ?></title>
+    <title>Configuración Women | <?php echo htmlspecialchars($org['name']); ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -497,6 +504,7 @@ $usuario = [
             border: 1px solid var(--gray-200);
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 2rem; /* Espacio entre cards */
         }
         
         .card-header {
@@ -629,16 +637,16 @@ $usuario = [
             <nav class="breadcrumb">
                 <span>Inicio</span>
                 <span>/</span>
-                <span class="breadcrumb-active">Configuración</span>
+                <span class="breadcrumb-active">Configuración Women</span>
             </nav>
         </header>
         <div class="content">
             <div class="page-header" style="margin-top: 2rem;">
                 <h1 class="page-title">
-                    <i class="fas fa-tshirt"></i> Apariencia: Nueva Colección
+                    <i class="fas fa-female"></i> Gestión de Productos Mujer
                 </h1>
                 <div class="page-actions" style="display: flex; align-items: center; gap: 10px;">
-                    <button type="submit" form="configForm" name="btn_guardar_global" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem;" onclick="confirmarAccion(event, this)" title="Guardar TODA la configuración">
+                    <button type="submit" form="womenConfigForm" name="btn_guardar_global" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem;" onclick="confirmarAccion(event, this)" title="Guardar TODA la configuración">
                         <i class="fas fa-save"></i> Guardar Todo
                     </button>
                 </div>
@@ -651,13 +659,13 @@ $usuario = [
                 </div>
             <?php endif; ?>
 
-            <form id="configForm" method="POST" action="" enctype="multipart/form-data">
+            <form id="womenConfigForm" method="POST" action="" enctype="multipart/form-data">
                 <div class="card">                  
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th width="30%">Elemento</th>
+                                    <th width="30%">Elemento Apariencia</th>
                                     <th width="30%">Valor</th>
                                     <th width="20%">Previsualización</th>
                                     <th width="10%">Estado</th>
@@ -670,44 +678,17 @@ $usuario = [
                                 <tr>
                                     <td>
                                         <div class="config-cell">
-                                            <div class="config-icon"><i class="fas fa-tag"></i></div>
-                                            <div class="config-info">
-                                                <div>Etiqueta Temporada</div>
-                                                <div>Ej: Primavera/Verano 2025</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="table-input" name="hero_label" value="<?php echo htmlspecialchars($nc_datos['hero_label'] ?? ''); ?>" placeholder="Texto pequeño superior">
-                                    </td>
-                                    <td><small><?php echo htmlspecialchars($nc_datos['hero_label'] ?? ''); ?></small></td>
-                                    <td><span class="badge badge-active">Texto</span></td>
-                                    <td>
-                                        <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_hero_label" class="btn-action btn-save" title="Guardar etiqueta" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-save"></i>
-                                            </button>
-                                            <button type="submit" name="btn_del_hero_label" class="btn-action btn-reset" title="Borrar etiqueta" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="config-cell">
                                             <div class="config-icon"><i class="fas fa-heading"></i></div>
                                             <div class="config-info">
                                                 <div>Título Principal</div>
-                                                <div>Ej: Nueva Colección</div>
+                                                <div>Ej: Colección Mujeres</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <textarea class="table-input" name="hero_title" rows="2"><?php echo htmlspecialchars($nc_datos['hero_title'] ?? ''); ?></textarea>
+                                        <textarea class="table-input" name="hero_title" rows="2"><?php echo htmlspecialchars($women_datos['hero_title'] ?? ''); ?></textarea>
                                     </td>
-                                    <td><strong><?php echo htmlspecialchars($nc_datos['hero_title'] ?? ''); ?></strong></td>
+                                    <td><strong><?php echo htmlspecialchars($women_datos['hero_title'] ?? ''); ?></strong></td>
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
@@ -727,14 +708,14 @@ $usuario = [
                                             <div class="config-icon"><i class="fas fa-align-left"></i></div>
                                             <div class="config-info">
                                                 <div>Descripción Corta</div>
-                                                <div>Ej: Piezas únicas...</div>
+                                                <div>Ej: Estilo contemporáneo...</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <textarea class="table-input" name="hero_subtitle" rows="2"><?php echo htmlspecialchars($nc_datos['hero_subtitle'] ?? ''); ?></textarea>
+                                        <textarea class="table-input" name="hero_subtitle" rows="2"><?php echo htmlspecialchars($women_datos['hero_subtitle'] ?? ''); ?></textarea>
                                     </td>
-                                    <td><small><?php echo htmlspecialchars($nc_datos['hero_subtitle'] ?? ''); ?></small></td>
+                                    <td><small><?php echo htmlspecialchars($women_datos['hero_subtitle'] ?? ''); ?></small></td>
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
@@ -762,19 +743,19 @@ $usuario = [
                                         <input type="file" class="table-input" name="hero_image" accept="image/*" style="padding: 0.3rem;">
                                     </td>
                                     <td>
-                                        <?php if (!empty($nc_datos['hero_image'])): ?>
-                                            <img src="../images/new_collection/<?php echo htmlspecialchars($nc_datos['hero_image']); ?>" style="width: 60px; height: 30px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
+                                        <?php if (!empty($women_datos['hero_image'])): ?>
+                                            <img src="../<?php echo htmlspecialchars($women_datos['hero_image']); ?>" style="width: 60px; height: 30px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
                                         <?php else: ?>
                                             <span style="font-size: 0.75rem; color: var(--gray-400);">Sin imagen</span>
                                         <?php endif; ?>
                                     </td>
-                                    <td><?php echo !empty($nc_datos['hero_image']) ? '<span class="badge badge-active">Cargada</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
+                                    <td><?php echo !empty($women_datos['hero_image']) ? '<span class="badge badge-active">Cargada</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
                                             <button type="submit" name="btn_save_hero_img" class="btn-action btn-save" title="Subir imagen" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-upload"></i>
                                             </button>
-                                            <?php if (!empty($nc_datos['hero_image'])): ?>
+                                            <?php if (!empty($women_datos['hero_image'])): ?>
                                             <button type="submit" name="btn_del_hero_img" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -782,69 +763,96 @@ $usuario = [
                                         </div>
                                     </td>
                                 </tr>
-
-                                <tr style="background-color: #f9fafb;"><td colspan="5" style="padding: 0.5rem 1rem; font-weight:bold; color:var(--primary); font-size:0.8rem;">SECCIÓN GRILLA PRODUCTOS</td></tr>
-
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">                  
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
                                 <tr>
+                                    <th width="30%">Producto</th>
+                                    <th width="20%">Marca / Subtítulo</th>
+                                    <th width="15%">Precio ($)</th>
+                                    <th width="25%">Imagen</th>
+                                    <th width="10%" style="text-align: right; padding-right: 1.5rem;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                <tr style="background-color: #f9fafb; border-bottom: 2px solid #e5e7eb;">
                                     <td>
                                         <div class="config-cell">
-                                            <div class="config-icon"><i class="fas fa-layer-group"></i></div>
+                                            <div class="config-icon"><i class="fas fa-plus"></i></div>
                                             <div class="config-info">
-                                                <div>Etiqueta Sección</div>
-                                                <div>Ej: Nuevas llegadas</div>
+                                                <input type="text" class="table-input" name="prod_name" placeholder="Nuevo Producto" required>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <input type="text" class="table-input" name="prod_label" value="<?php echo htmlspecialchars($nc_datos['prod_label'] ?? ''); ?>" placeholder="Etiqueta grid">
+                                        <input type="text" class="table-input" name="prod_brand" placeholder="Marca" required>
                                     </td>
-                                    <td><small><?php echo htmlspecialchars($nc_datos['prod_label'] ?? ''); ?></small></td>
-                                    <td><span class="badge badge-active">Texto</span></td>
+                                    <td>
+                                        <input type="number" step="0.01" class="table-input" name="prod_price" placeholder="0.00" required>
+                                    </td>
+                                    <td>
+                                        <input type="file" class="table-input" name="prod_image" accept="image/*" required style="padding: 0.3rem;">
+                                    </td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_prod_label" class="btn-action btn-save" title="Guardar etiqueta" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-save"></i>
-                                            </button>
-                                            <button type="submit" name="btn_del_prod_label" class="btn-action btn-reset" title="Borrar etiqueta" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <button type="submit" name="btn_save_product" class="btn-action btn-save" title="Agregar"><i class="fas fa-save"></i></button>
                                         </div>
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>
-                                        <div class="config-cell">
-                                            <div class="config-icon"><i class="fas fa-font"></i></div>
-                                            <div class="config-info">
-                                                <div>Título Sección</div>
-                                                <div>Ej: Lo más reciente</div>
+                                <?php if (isset($productos_list) && count($productos_list) > 0): ?>
+                                    <?php foreach ($productos_list as $prod): ?>
+                                    <tr>
+                                        <td>
+                                            <div class="config-cell">
+                                                <div class="config-icon"><i class="fas fa-box"></i></div>
+                                                <div class="config-info">
+                                                    <div><?php echo htmlspecialchars($prod['nombre']); ?></div>
+                                                    <div>ID: <?php echo $prod['id']; ?></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="table-input" name="prod_title" value="<?php echo htmlspecialchars($nc_datos['prod_title'] ?? ''); ?>" placeholder="Título grid">
-                                    </td>
-                                    <td><strong><?php echo htmlspecialchars($nc_datos['prod_title'] ?? ''); ?></strong></td>
-                                    <td><span class="badge badge-active">Texto</span></td>
-                                    <td>
-                                        <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_prod_title" class="btn-action btn-save" title="Guardar título" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-save"></i>
-                                            </button>
-                                            <button type="submit" name="btn_del_prod_title" class="btn-action btn-reset" title="Borrar título" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td><span class="badge badge-active"><?php echo htmlspecialchars($prod['marca']); ?></span></td>
+                                        <td><strong>$<?php echo number_format($prod['precio'], 2); ?></strong></td>
+                                        <td>
+                                            <img src="../../<?php echo htmlspecialchars($prod['imagen']); ?>" style="width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
+                                        </td>
+                                        <td>
+                                            <div class="row-actions" style="justify-content: flex-end;">
+                                                <input type="hidden" name="del_id" form="del_form_<?php echo $prod['id']; ?>" value="<?php echo $prod['id']; ?>">
+                                                <button type="submit" form="del_form_<?php echo $prod['id']; ?>" name="btn_del_product" class="btn-action btn-reset" title="Borrar" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Eliminar este producto?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 2rem; color: var(--gray-500);">No hay productos registrados.</td>
+                                    </tr>
+                                <?php endif; ?>
+
                             </tbody>
                         </table>
                     </div>
                 </div>
             </form>
-        </div>                                       
-        </main>
+            
+            <?php if(isset($productos_list)): ?>
+                <?php foreach ($productos_list as $prod): ?>
+                    <form id="del_form_<?php echo $prod['id']; ?>" method="POST" style="display:none;"></form>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+        </div>                                   
+    </main>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -852,13 +860,16 @@ $usuario = [
     <script>
         // 1. Feedback visual de escala
         document.querySelectorAll('.btn-action').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => this.style.transform = 'scale(1)', 150);
+            btn.addEventListener('click', function(e) {
+                // Si es un botón submit normal que no usa SweetAlert, dejamos pasar
+                if(!this.getAttribute('onclick') || this.getAttribute('onclick').includes('return confirm')) {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => this.style.transform = 'scale(1)', 150);
+                }
             });
         });
 
-        // 2. Función global de confirmación
+        // 2. Función global de confirmación para la configuración de apariencia
         function confirmarAccion(e, boton) {
             if (e) e.preventDefault();
             
@@ -873,7 +884,7 @@ $usuario = [
 
             Swal.fire({
                 title: `¿${accion}?`,
-                text: "Esta acción actualizará la sección Nueva Colección.",
+                text: "Esta acción actualizará la sección Women.",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: 'var(--primary)', 

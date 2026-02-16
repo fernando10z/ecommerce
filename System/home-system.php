@@ -639,6 +639,11 @@ $usuario = [
                         <i class="fas fa-image"></i>
                         Apariencia de Página Home
                     </h1>
+                    <div class="page-actions" style="display: flex; align-items: center; gap: 10px;">
+                        <button type="submit" form="configForm" name="btn_guardar_global" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem;" onclick="confirmarAccion(event, this)" title="Guardar TODA la configuración">
+                            <i class="fas fa-save"></i> Guardar Todo
+                        </button>
+                    </div>
                 </div>
 
             <?php if (!empty($mensaje)): ?>
@@ -680,10 +685,10 @@ $usuario = [
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_label" class="btn-action btn-save" title="Guardar Etiqueta">
+                                            <button type="submit" name="btn_save_label" class="btn-action btn-save" title="Guardar Etiqueta" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-save"></i>
                                             </button>
-                                            <button type="submit" name="btn_delete_label" class="btn-action btn-reset" title="Borrar texto" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Borrar etiqueta?')">
+                                            <button type="submit" name="btn_delete_label" class="btn-action btn-reset" title="Borrar etiqueta" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -707,10 +712,10 @@ $usuario = [
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_title" class="btn-action btn-save" title="Guardar Título">
+                                            <button type="submit" name="btn_save_title" class="btn-action btn-save" title="Guardar Título" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-save"></i>
                                             </button>
-                                            <button type="submit" name="btn_delete_title" class="btn-action btn-reset" title="Borrar título" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Borrar título?')">
+                                            <button type="submit" name="btn_delete_title" class="btn-action btn-reset" title="Borrar título" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -738,10 +743,10 @@ $usuario = [
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_desc" class="btn-action btn-save" title="Guardar Descripción">
+                                            <button type="submit" name="btn_save_desc" class="btn-action btn-save" title="Guardar Descripción" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-save"></i>
                                             </button>
-                                            <button type="submit" name="btn_delete_desc" class="btn-action btn-reset" title="Borrar descripción" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Borrar descripción?')">
+                                            <button type="submit" name="btn_delete_desc" class="btn-action btn-reset" title="Borrar descripción" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -771,12 +776,12 @@ $usuario = [
                                     <td><?php echo !empty($datos_actuales['image_background']) ? '<span class="badge badge-active">Cargada</span>' : '<span class="badge badge-company">Vacío</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_image" class="btn-action btn-save" title="Subir imagen">
+                                            <button type="submit" name="btn_save_image" class="btn-action btn-save" title="Subir imagen" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-upload"></i>
                                             </button>
                                             
                                             <?php if (!empty($datos_actuales['image_background'])): ?>
-                                            <button type="submit" name="btn_delete_image" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Eliminar imagen?')">
+                                            <button type="submit" name="btn_delete_image" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                             <?php endif; ?>
@@ -807,11 +812,11 @@ $usuario = [
                                     <td><?php echo !empty($datos_actuales['image_woman']) ? '<span class="badge badge-active">Cargada</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_woman" class="btn-action btn-save" title="Subir imagen">
+                                            <button type="submit" name="btn_save_woman" class="btn-action btn-save" title="Subir imagen" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-upload"></i>
                                             </button>
                                             <?php if (!empty($datos_actuales['image_woman'])): ?>
-                                            <button type="submit" name="btn_delete_woman" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Eliminar imagen?')">
+                                            <button type="submit" name="btn_delete_woman" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                             <?php endif; ?>
@@ -842,11 +847,11 @@ $usuario = [
                                     <td><?php echo !empty($datos_actuales['image_man']) ? '<span class="badge badge-active">Cargada</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_man" class="btn-action btn-save" title="Subir imagen">
+                                            <button type="submit" name="btn_save_man" class="btn-action btn-save" title="Subir imagen" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-upload"></i>
                                             </button>
                                             <?php if (!empty($datos_actuales['image_man'])): ?>
-                                            <button type="submit" name="btn_delete_man" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Eliminar imagen?')">
+                                            <button type="submit" name="btn_delete_man" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                             <?php endif; ?>
@@ -877,11 +882,11 @@ $usuario = [
                                     <td><?php echo !empty($datos_actuales['image_sale']) ? '<span class="badge badge-active">Cargada</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_sale" class="btn-action btn-save" title="Subir imagen">
+                                            <button type="submit" name="btn_save_sale" class="btn-action btn-save" title="Subir imagen" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-upload"></i>
                                             </button>
                                             <?php if (!empty($datos_actuales['image_sale'])): ?>
-                                            <button type="submit" name="btn_delete_sale" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Eliminar imagen?')">
+                                            <button type="submit" name="btn_delete_sale" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                             <?php endif; ?>
@@ -906,10 +911,10 @@ $usuario = [
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_cat_label" class="btn-action btn-save" title="Guardar Etiqueta">
+                                            <button type="submit" name="btn_save_cat_label" class="btn-action btn-save" title="Guardar Etiqueta" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-save"></i>
                                             </button>
-                                            <button type="submit" name="btn_delete_cat_label" class="btn-action btn-reset" title="Borrar texto" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Borrar etiqueta?')">
+                                            <button type="submit" name="btn_delete_cat_label" class="btn-action btn-reset" title="Borrar etiqueta" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -933,10 +938,10 @@ $usuario = [
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_cat_title" class="btn-action btn-save" title="Guardar Título">
+                                            <button type="submit" name="btn_save_cat_title" class="btn-action btn-save" title="Guardar Título" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-save"></i>
                                             </button>
-                                            <button type="submit" name="btn_delete_cat_title" class="btn-action btn-reset" title="Borrar título" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Borrar título?')">
+                                            <button type="submit" name="btn_delete_cat_title" class="btn-action btn-reset" title="Borrar título" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -960,10 +965,10 @@ $usuario = [
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_news_title" class="btn-action btn-save" title="Guardar Título">
+                                            <button type="submit" name="btn_save_news_title" class="btn-action btn-save" title="Guardar Título" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-save"></i>
                                             </button>
-                                            <button type="submit" name="btn_delete_news_title" class="btn-action btn-reset" title="Borrar título" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Borrar título?')">
+                                            <button type="submit" name="btn_delete_news_title" class="btn-action btn-reset" title="Borrar título" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -991,10 +996,10 @@ $usuario = [
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_news_desc" class="btn-action btn-save" title="Guardar Descripción">
+                                            <button type="submit" name="btn_save_news_desc" class="btn-action btn-save" title="Guardar Descripción" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-save"></i>
                                             </button>
-                                            <button type="submit" name="btn_delete_news_desc" class="btn-action btn-reset" title="Borrar descripción" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Borrar descripción?')">
+                                            <button type="submit" name="btn_delete_news_desc" class="btn-action btn-reset" title="Borrar descripción" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -1009,18 +1014,57 @@ $usuario = [
     </main>
 </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        // Pequeño script para simular interactividad de la UI Pro
+        // 1. Feedback visual de escala para botones
         document.querySelectorAll('.btn-action').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                // Si es un botón submit real, dejamos que pase. 
-                // Esto es solo para feedback visual instantáneo
-                if(!this.getAttribute('onclick')) {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => this.style.transform = 'scale(1)', 150);
-                }
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => this.style.transform = 'scale(1)', 150);
             });
         });
+
+        // 2. Función global de confirmación (Misma lógica que design-system)
+        function confirmarAccion(e, boton) {
+            if (e) e.preventDefault();
+            
+            const accion = boton.getAttribute('title') || 'realizar esta acción';
+            const name = boton.getAttribute('name');
+            const form = boton.form;
+
+            if (!form) {
+                console.error("Error: El botón no pertenece a ningún formulario.");
+                return;
+            }
+
+            Swal.fire({
+                title: `¿${accion}?`,
+                text: "Esta acción actualizará la sección visual del Home.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--primary)', 
+                cancelButtonColor: '#6b7280', 
+                confirmButtonText: 'Sí, continuar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+                focusCancel: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Feedback visual de carga
+                    Swal.showLoading();
+
+                    // IMPORTANTE: Crear input oculto para que PHP detecte qué botón se pulsó
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = name;
+                    hiddenInput.value = '1';
+                    form.appendChild(hiddenInput);
+                    
+                    form.submit();
+                }
+            });
+        }
     </script>
 </body>
 </html>

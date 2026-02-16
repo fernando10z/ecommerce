@@ -17,17 +17,55 @@ if (!function_exists('obtenerDatosActuales')) {
     }
 }
 
+// Función auxiliar para borrar el archivo físico
+if (!function_exists('eliminarImagenFisica')) {
+    function eliminarImagenFisica($nombreArchivo) {
+        if (!empty($nombreArchivo)) {
+            $ruta = __DIR__ . '/../../images/home/' . $nombreArchivo;
+            if (file_exists($ruta)) {
+                unlink($ruta); // Borrar el archivo real
+            }
+        }
+    }
+}
+
 $datos_actuales = obtenerDatosActuales($conn);
 $mensaje = "";
 
 /* =====================================================
-   LÓGICA DE ACCIONES INDIVIDUALES
+   LÓGICA DE ACCIONES
    ===================================================== */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         
+        // 0. GUARDADO GENERAL (NUEVO: Actualiza todos los textos a la vez)
+        if (isset($_POST['btn_guardar_global'])) {
+            $sql = "UPDATE web_design_home SET 
+                    hero_label = ?, 
+                    hero_title = ?, 
+                    hero_subtitle = ?, 
+                    cat_label = ?, 
+                    cat_title = ?, 
+                    news_title = ?, 
+                    news_subtitle = ? 
+                    WHERE id = 1";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([
+                $_POST['hero_label'] ?? '',
+                $_POST['hero_title'] ?? '',
+                $_POST['hero_subtitle'] ?? '',
+                $_POST['cat_label'] ?? '',
+                $_POST['cat_title'] ?? '',
+                $_POST['news_title'] ?? '',
+                $_POST['news_subtitle'] ?? ''
+            ]);
+            
+            $mensaje = "¡Toda la información de texto ha sido actualizada!";
+        }
+
         // 1. ETIQUETA SUPERIOR (LABEL)
-        if (isset($_POST['btn_save_label'])) {
+        elseif (isset($_POST['btn_save_label'])) {
             $val = $_POST['hero_label'] ?? '';
             $stmt = $conn->prepare("UPDATE web_design_home SET hero_label = ? WHERE id = 1");
             $stmt->execute([$val]);
@@ -74,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     $nuevoNombre = 'hero_' . time() . '.' . $extension;
                     if (move_uploaded_file($_FILES['hero_image']['tmp_name'], $carpeta . $nuevoNombre)) {
+                        eliminarImagenFisica($datos_actuales['image_background']); 
                         $stmt = $conn->prepare("UPDATE web_design_home SET image_background = ? WHERE id = 1");
                         $stmt->execute([$nuevoNombre]);
                         $mensaje = "Imagen actualizada.";
@@ -87,6 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         elseif (isset($_POST['btn_delete_image'])) {
             $conn->query("UPDATE web_design_home SET image_background = '' WHERE id = 1");
+            eliminarImagenFisica($datos_actuales['image_background']); 
             $mensaje = "Imagen eliminada.";
         }
 
@@ -100,9 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $carpeta = __DIR__ . '/../../images/home/';
                     if (!is_dir($carpeta)) mkdir($carpeta, 0755, true);
                     
-                    // Prefijo 'woman_' para identificarla fácil
                     $nuevoNombre = 'woman_' . time() . '.' . $extension;
                     if (move_uploaded_file($_FILES['image_woman']['tmp_name'], $carpeta . $nuevoNombre)) {
+                        eliminarImagenFisica($datos_actuales['image_woman']);
                         $stmt = $conn->prepare("UPDATE web_design_home SET image_woman = ? WHERE id = 1");
                         $stmt->execute([$nuevoNombre]);
                         $mensaje = "Imagen 'Mujer' actualizada.";
@@ -116,6 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         elseif (isset($_POST['btn_delete_woman'])) {
             $conn->query("UPDATE web_design_home SET image_woman = '' WHERE id = 1");
+            eliminarImagenFisica($datos_actuales['image_woman']);
             $mensaje = "Imagen 'Mujer' eliminada.";
         }
 
@@ -129,6 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $carpeta = __DIR__ . '/../../images/home/';
                     $nuevoNombre = 'man_' . time() . '.' . $extension;
                     if (move_uploaded_file($_FILES['image_man']['tmp_name'], $carpeta . $nuevoNombre)) {
+                        eliminarImagenFisica($datos_actuales['image_man']);
                         $stmt = $conn->prepare("UPDATE web_design_home SET image_man = ? WHERE id = 1");
                         $stmt->execute([$nuevoNombre]);
                         $mensaje = "Imagen 'Hombre' actualizada.";
@@ -138,6 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         elseif (isset($_POST['btn_delete_man'])) {
             $conn->query("UPDATE web_design_home SET image_man = '' WHERE id = 1");
+            eliminarImagenFisica($datos_actuales['image_man']);
             $mensaje = "Imagen 'Hombre' eliminada.";
         }
 
@@ -151,6 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $carpeta = __DIR__ . '/../../images/home/';
                     $nuevoNombre = 'sale_' . time() . '.' . $extension;
                     if (move_uploaded_file($_FILES['image_sale']['tmp_name'], $carpeta . $nuevoNombre)) {
+                        eliminarImagenFisica($datos_actuales['image_sale']);
                         $stmt = $conn->prepare("UPDATE web_design_home SET image_sale = ? WHERE id = 1");
                         $stmt->execute([$nuevoNombre]);
                         $mensaje = "Imagen 'Sale' actualizada.";
@@ -160,11 +204,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         elseif (isset($_POST['btn_delete_sale'])) {
             $conn->query("UPDATE web_design_home SET image_sale = '' WHERE id = 1");
+            eliminarImagenFisica($datos_actuales['image_sale']);
             $mensaje = "Imagen 'Sale' eliminada.";
         }
 
         // 8. ETIQUETA SUPERIOR (CATEGORÍA)
-        if (isset($_POST['btn_save_cat_label'])) {
+        elseif (isset($_POST['btn_save_cat_label'])) {
             $val = $_POST['cat_label'] ?? '';
             $stmt = $conn->prepare("UPDATE web_design_home SET cat_label = ? WHERE id = 1");
             $stmt->execute([$val]);

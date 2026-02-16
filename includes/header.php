@@ -4,9 +4,17 @@ global $pages;
 require_once __DIR__ . '/../System/apariencia/design-config.php';
 ?>
 <header>
-    <div class="top-banner">
-        <?php echo htmlspecialchars($TOP_BANNER_TEXT); ?>
-    </div>
+    <?php
+    // Verificamos si la configuración dice que sea visible (1)
+    // Usamos !empty para evitar errores si el campo está vacío
+    if (!empty($datos_actuales['banner_visible']) && $datos_actuales['banner_visible'] == 1):
+    ?>
+
+        <div class="top-banner">
+            <?php echo htmlspecialchars($TOP_BANNER_TEXT); ?>
+        </div>
+
+    <?php endif; ?>
     <nav>
         <a href="index.php" class="logo"><?php echo htmlspecialchars($SITE_NAME); ?></a>
         
@@ -150,6 +158,26 @@ require_once __DIR__ . '/../System/apariencia/design-config.php';
         const modal = document.getElementById('userModal');
         modal.classList.toggle('active');
     }
+
+    //Automatización de tamaño cuando desaparezca el banner superior
+    function ajustarAlturaHeader() {
+        const header = document.querySelector('header');
+        if (header) {
+            // 1. Mide cuánto mide realmente el header (con o sin banner)
+            const alturaReal = header.offsetHeight;
+            
+            // 2. Actualiza la variable CSS globalmente
+            document.documentElement.style.setProperty('--header-height', alturaReal + 'px');
+        }
+    }
+
+    // Ejecutamos en varios momentos para asegurar que no falle:
+    // 1. Cuando el DOM esté listo (rápido)
+    document.addEventListener('DOMContentLoaded', ajustarAlturaHeader);
+    // 2. Cuando todo (imágenes, fuentes) haya cargado (seguro)
+    window.addEventListener('load', ajustarAlturaHeader);
+    // 3. Si el usuario cambia el tamaño de la ventana
+    window.addEventListener('resize', ajustarAlturaHeader);
 
     // Alternar entre Login y Registro dentro del modal
     function switchAuthForm(formType) {

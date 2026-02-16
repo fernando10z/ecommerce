@@ -1,14 +1,15 @@
 <?php
 session_start();
 require_once 'conexion/conexion.php';
-require_once __DIR__ . '/apariencia/newcollection-config.php';
+// CAMBIO: Conectamos con el config específico de SALE
+require_once __DIR__ . '/apariencia/sale-config.php';
 
 // Obtener datos de la organización
 $stmt = $conn->prepare("SELECT * FROM organizations LIMIT 1");
 $stmt->execute();
 $org = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Valores por defecto para comparación (Lógica Pro para los Badges)
+// Valores por defecto
 $defaults = [
     'primary_color' => '#10b981',
     'secondary_color' => '#059669',
@@ -20,19 +21,20 @@ if (!$org) {
     $org = array_merge(['name' => 'CRM Pro', 'logo_url' => 'assets/images/collab.png'], $defaults);
 }
 
-// Función helper para determinar estado (Simulación visual)
+// Inicializamos la variable de datos (Conectado a sale-config.php)
+$sale_datos = [
+    'hero_title'    => $sale_design['hero_title'] ?? '',
+    'hero_subtitle' => $sale_design['hero_subtitle'] ?? '',
+    'hero_image'    => $sale_design['hero_image'] ?? ''
+];
+
+// Función helper (igual que antes)
 function getStatusBadge($current, $default) {
     if ($current !== $default && !empty($current)) {
         return '<span class="badge badge-active">Personalizado</span>';
     }
     return '<span class="badge badge-company">Por defecto</span>';
 }
-
-$usuario = [
-    'nombre' => 'Fernando',
-    'email' => 'fernando@ejemplo.com',
-    'rol' => 'Administrador'
-];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -40,10 +42,13 @@ $usuario = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="<?php echo $org['logo_url']; ?>" type="image/png">
-    <title>Configuración | <?php echo htmlspecialchars($org['name']); ?></title>
+    <title>Configuración Sale | <?php echo htmlspecialchars($org['name']); ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* ==========================================================================
+           CSS EXACTO DEL USUARIO (NO TOCAR)
+           ========================================================================== */
         :root {
             --primary: <?php echo $org['primary_color']; ?>;
             --primary-dark: <?php echo $org['secondary_color']; ?>;
@@ -497,6 +502,7 @@ $usuario = [
             border: 1px solid var(--gray-200);
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 2rem; /* Espacio entre cards */
         }
         
         .card-header {
@@ -629,16 +635,16 @@ $usuario = [
             <nav class="breadcrumb">
                 <span>Inicio</span>
                 <span>/</span>
-                <span class="breadcrumb-active">Configuración</span>
+                <span class="breadcrumb-active">Configuración Sale</span>
             </nav>
         </header>
         <div class="content">
             <div class="page-header" style="margin-top: 2rem;">
                 <h1 class="page-title">
-                    <i class="fas fa-tshirt"></i> Apariencia: Nueva Colección
+                    <i class="fas fa-tags"></i> Gestión de Ofertas (Sale)
                 </h1>
                 <div class="page-actions" style="display: flex; align-items: center; gap: 10px;">
-                    <button type="submit" form="configForm" name="btn_guardar_global" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem;" onclick="confirmarAccion(event, this)" title="Guardar TODA la configuración">
+                    <button type="submit" form="saleConfigForm" name="btn_save_global" class="btn-action btn-save" style="width: auto; padding: 0 1rem; gap: 0.5rem;" onclick="confirmarAccion(event, this)" title="Guardar TODA la configuración">
                         <i class="fas fa-save"></i> Guardar Todo
                     </button>
                 </div>
@@ -651,13 +657,14 @@ $usuario = [
                 </div>
             <?php endif; ?>
 
-            <form id="configForm" method="POST" action="" enctype="multipart/form-data">
+            <form id="saleConfigForm" method="POST" action="" enctype="multipart/form-data">
+                
                 <div class="card">                  
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th width="30%">Elemento</th>
+                                    <th width="30%">Elemento Apariencia</th>
                                     <th width="30%">Valor</th>
                                     <th width="20%">Previsualización</th>
                                     <th width="10%">Estado</th>
@@ -670,44 +677,17 @@ $usuario = [
                                 <tr>
                                     <td>
                                         <div class="config-cell">
-                                            <div class="config-icon"><i class="fas fa-tag"></i></div>
-                                            <div class="config-info">
-                                                <div>Etiqueta Temporada</div>
-                                                <div>Ej: Primavera/Verano 2025</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="table-input" name="hero_label" value="<?php echo htmlspecialchars($nc_datos['hero_label'] ?? ''); ?>" placeholder="Texto pequeño superior">
-                                    </td>
-                                    <td><small><?php echo htmlspecialchars($nc_datos['hero_label'] ?? ''); ?></small></td>
-                                    <td><span class="badge badge-active">Texto</span></td>
-                                    <td>
-                                        <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_hero_label" class="btn-action btn-save" title="Guardar etiqueta" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-save"></i>
-                                            </button>
-                                            <button type="submit" name="btn_del_hero_label" class="btn-action btn-reset" title="Borrar etiqueta" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="config-cell">
                                             <div class="config-icon"><i class="fas fa-heading"></i></div>
                                             <div class="config-info">
                                                 <div>Título Principal</div>
-                                                <div>Ej: Nueva Colección</div>
+                                                <div>Ej: SALE</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <textarea class="table-input" name="hero_title" rows="2"><?php echo htmlspecialchars($nc_datos['hero_title'] ?? ''); ?></textarea>
+                                        <textarea class="table-input" name="hero_title" rows="2"><?php echo htmlspecialchars($sale_datos['hero_title'] ?? ''); ?></textarea>
                                     </td>
-                                    <td><strong><?php echo htmlspecialchars($nc_datos['hero_title'] ?? ''); ?></strong></td>
+                                    <td><strong><?php echo htmlspecialchars($sale_datos['hero_title'] ?? ''); ?></strong></td>
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
@@ -726,15 +706,15 @@ $usuario = [
                                         <div class="config-cell">
                                             <div class="config-icon"><i class="fas fa-align-left"></i></div>
                                             <div class="config-info">
-                                                <div>Descripción Corta</div>
-                                                <div>Ej: Piezas únicas...</div>
+                                                <div>Subtítulo / Info</div>
+                                                <div>Ej: Hasta 50% OFF</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <textarea class="table-input" name="hero_subtitle" rows="2"><?php echo htmlspecialchars($nc_datos['hero_subtitle'] ?? ''); ?></textarea>
+                                        <textarea class="table-input" name="hero_subtitle" rows="2"><?php echo htmlspecialchars($sale_datos['hero_subtitle'] ?? ''); ?></textarea>
                                     </td>
-                                    <td><small><?php echo htmlspecialchars($nc_datos['hero_subtitle'] ?? ''); ?></small></td>
+                                    <td><small><?php echo htmlspecialchars($sale_datos['hero_subtitle'] ?? ''); ?></small></td>
                                     <td><span class="badge badge-active">Texto</span></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
@@ -753,8 +733,8 @@ $usuario = [
                                         <div class="config-cell">
                                             <div class="config-icon"><i class="fas fa-image"></i></div>
                                             <div class="config-info">
-                                                <div>Banner Fondo</div>
-                                                <div>Imagen grande superior</div>
+                                                <div>Fondo Hero</div>
+                                                <div>Banner Principal</div>
                                             </div>
                                         </div>
                                     </td>
@@ -762,79 +742,23 @@ $usuario = [
                                         <input type="file" class="table-input" name="hero_image" accept="image/*" style="padding: 0.3rem;">
                                     </td>
                                     <td>
-                                        <?php if (!empty($nc_datos['hero_image'])): ?>
-                                            <img src="../images/new_collection/<?php echo htmlspecialchars($nc_datos['hero_image']); ?>" style="width: 60px; height: 30px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
+                                        <?php if (!empty($sale_datos['hero_image'])): ?>
+                                            <img src="../<?php echo htmlspecialchars($sale_datos['hero_image']); ?>" style="width: 60px; height: 30px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
                                         <?php else: ?>
                                             <span style="font-size: 0.75rem; color: var(--gray-400);">Sin imagen</span>
                                         <?php endif; ?>
                                     </td>
-                                    <td><?php echo !empty($nc_datos['hero_image']) ? '<span class="badge badge-active">Cargada</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
+                                    <td><?php echo !empty($sale_datos['hero_image']) ? '<span class="badge badge-active">Cargada</span>' : '<span class="badge badge-company">Default</span>'; ?></td>
                                     <td>
                                         <div class="row-actions" style="justify-content: flex-end;">
                                             <button type="submit" name="btn_save_hero_img" class="btn-action btn-save" title="Subir imagen" onclick="confirmarAccion(event, this)">
                                                 <i class="fas fa-upload"></i>
                                             </button>
-                                            <?php if (!empty($nc_datos['hero_image'])): ?>
-                                            <button type="submit" name="btn_del_hero_img" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <?php if (!empty($sale_datos['hero_image'])): ?>
+                                                <button type="submit" name="btn_del_hero_img" class="btn-action btn-reset" title="Eliminar imagen" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             <?php endif; ?>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr style="background-color: #f9fafb;"><td colspan="5" style="padding: 0.5rem 1rem; font-weight:bold; color:var(--primary); font-size:0.8rem;">SECCIÓN GRILLA PRODUCTOS</td></tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="config-cell">
-                                            <div class="config-icon"><i class="fas fa-layer-group"></i></div>
-                                            <div class="config-info">
-                                                <div>Etiqueta Sección</div>
-                                                <div>Ej: Nuevas llegadas</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="table-input" name="prod_label" value="<?php echo htmlspecialchars($nc_datos['prod_label'] ?? ''); ?>" placeholder="Etiqueta grid">
-                                    </td>
-                                    <td><small><?php echo htmlspecialchars($nc_datos['prod_label'] ?? ''); ?></small></td>
-                                    <td><span class="badge badge-active">Texto</span></td>
-                                    <td>
-                                        <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_prod_label" class="btn-action btn-save" title="Guardar etiqueta" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-save"></i>
-                                            </button>
-                                            <button type="submit" name="btn_del_prod_label" class="btn-action btn-reset" title="Borrar etiqueta" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="config-cell">
-                                            <div class="config-icon"><i class="fas fa-font"></i></div>
-                                            <div class="config-info">
-                                                <div>Título Sección</div>
-                                                <div>Ej: Lo más reciente</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="table-input" name="prod_title" value="<?php echo htmlspecialchars($nc_datos['prod_title'] ?? ''); ?>" placeholder="Título grid">
-                                    </td>
-                                    <td><strong><?php echo htmlspecialchars($nc_datos['prod_title'] ?? ''); ?></strong></td>
-                                    <td><span class="badge badge-active">Texto</span></td>
-                                    <td>
-                                        <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_prod_title" class="btn-action btn-save" title="Guardar título" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-save"></i>
-                                            </button>
-                                            <button type="submit" name="btn_del_prod_title" class="btn-action btn-reset" title="Borrar título" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -842,19 +766,111 @@ $usuario = [
                         </table>
                     </div>
                 </div>
+
+                <div class="card">                  
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th width="20%">Producto / Marca</th>
+                                    <th width="20%">Precios (Actual/Old)</th>
+                                    <th width="15%">Descuento</th>
+                                    <th width="25%">Imagen</th>
+                                    <th width="10%" style="text-align: right; padding-right: 1.5rem;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background-color: #f9fafb; border-bottom: 2px solid #e5e7eb;">
+                                    <td>
+                                        <div class="config-cell">
+                                            <div class="config-icon"><i class="fas fa-plus"></i></div>
+                                            <div class="config-info">
+                                                <input type="text" class="table-input" name="prod_name" placeholder="Producto" required style="margin-bottom: 4px;">
+                                                <input type="text" class="table-input" name="prod_brand" placeholder="Marca" required>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" class="table-input" name="prod_price" placeholder="Oferta ($)" required style="margin-bottom: 4px; font-weight:bold;">
+                                        <input type="number" step="0.01" class="table-input" name="prod_old_price" placeholder="Antes ($)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="table-input" name="prod_discount" placeholder="Ej: -50%">
+                                    </td>
+                                    <td>
+                                        <input type="file" class="table-input" name="prod_image" accept="image/*" required style="padding: 0.3rem;">
+                                    </td>
+                                    <td>
+                                        <div class="row-actions" style="justify-content: flex-end;">
+                                            <button type="submit" name="btn_save_product" class="btn-action btn-save" title="Agregar" onclick="confirmarAccion(event, this)">
+                                                <i class="fas fa-save"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <?php if (isset($productos_list) && count($productos_list) > 0): ?>
+                                    <?php foreach ($productos_list as $prod): ?>
+                                    <tr>
+                                        <td>
+                                            <div class="config-cell">
+                                                <div class="config-icon"><i class="fas fa-tag"></i></div>
+                                                <div class="config-info">
+                                                    <div><?php echo htmlspecialchars($prod['name']); ?></div>
+                                                    <div><?php echo htmlspecialchars($prod['brand']); ?></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: bold; color: var(--primary);">$<?php echo number_format($prod['price'], 2); ?></div>
+                                            <?php if(!empty($prod['old_price']) && $prod['old_price'] > 0): ?>
+                                                <div style="text-decoration: line-through; color: #999; font-size: 0.8rem;">$<?php echo number_format($prod['old_price'], 2); ?></div>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><span class="badge badge-active"><?php echo htmlspecialchars($prod['discount'] ?? '-'); ?></span></td>
+                                        <td>
+                                            <img src="../../<?php echo htmlspecialchars($prod['image']); ?>" style="width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
+                                        </td>
+                                        <td>
+                                            <div class="row-actions" style="justify-content: flex-end;">
+                                                <input type="hidden" name="del_id" form="del_form_<?php echo $prod['id']; ?>" value="<?php echo $prod['id']; ?>">
+                                                <button type="submit" form="del_form_<?php echo $prod['id']; ?>" name="btn_del_product" class="btn-action btn-reset" title="Borrar oferta" style="color: #dc2626; background: #fee2e2;" onclick="confirmarAccion(event, this)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 2rem; color: var(--gray-500);">No hay ofertas registradas.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </form>
-        </div>                                       
-        </main>
+            
+            <?php if(isset($productos_list)): ?>
+                <?php foreach ($productos_list as $prod): ?>
+                    <form id="del_form_<?php echo $prod['id']; ?>" method="POST" style="display:none;"></form>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+        </div>                                   
+    </main>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         // 1. Feedback visual de escala
         document.querySelectorAll('.btn-action').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => this.style.transform = 'scale(1)', 150);
+            btn.addEventListener('click', function(e) {
+                if(!this.getAttribute('onclick') || this.getAttribute('onclick').includes('return confirm')) {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => this.style.transform = 'scale(1)', 150);
+                }
             });
         });
 
@@ -873,7 +889,7 @@ $usuario = [
 
             Swal.fire({
                 title: `¿${accion}?`,
-                text: "Esta acción actualizará la sección Nueva Colección.",
+                text: "Esta acción actualizará la sección Sale.",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: 'var(--primary)', 

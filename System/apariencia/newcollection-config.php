@@ -18,6 +18,18 @@ if (!function_exists('obtenerDatosNewColl')) {
     }
 }
 
+// Función auxiliar para borrar el archivo físico
+if (!function_exists('eliminarImagenFisica')) {
+    function eliminarImagenFisica($nombreArchivo) {
+        if (!empty($nombreArchivo)) {
+            $ruta = __DIR__ . '/../../images/new_collection/' . $nombreArchivo;
+            if (file_exists($ruta)) {
+                unlink($ruta); // Borrar el archivo real
+            }
+        }
+    }
+}
+
 $nc_datos = obtenerDatosNewColl($conn);
 $mensaje = "";
 
@@ -27,10 +39,32 @@ $mensaje = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         
+        // 0. GUARDADO GENERAL (NUEVO: Actualiza todos los textos a la vez)
+        if (isset($_POST['btn_guardar_global'])) {
+            $sql = "UPDATE web_design_new_collection SET 
+                    hero_label = ?, 
+                    hero_title = ?, 
+                    hero_subtitle = ?, 
+                    prod_label = ?, 
+                    prod_title = ? 
+                    WHERE id = 1";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([
+                $_POST['hero_label'] ?? '',
+                $_POST['hero_title'] ?? '',
+                $_POST['hero_subtitle'] ?? '',
+                $_POST['prod_label'] ?? '',
+                $_POST['prod_title'] ?? ''
+            ]);
+            
+            $mensaje = "¡Toda la configuración de texto ha sido actualizada!";
+        }
+
         // --- SECCIÓN HERO ---
 
         // 1. Label Superior (Ej: Primavera/Verano)
-        if (isset($_POST['btn_save_hero_label'])) {
+        elseif (isset($_POST['btn_save_hero_label'])) {
             $val = $_POST['hero_label'] ?? '';
             $stmt = $conn->prepare("UPDATE web_design_new_collection SET hero_label = ? WHERE id = 1");
             $stmt->execute([$val]);
@@ -79,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $nuevoNombre = 'nc_hero_' . time() . '.' . $extension;
                     
                     if (move_uploaded_file($_FILES['hero_image']['tmp_name'], $carpeta . $nuevoNombre)) {
+                        eliminarImagenFisica($nc_datos['hero_image']); 
                         $stmt = $conn->prepare("UPDATE web_design_new_collection SET hero_image = ? WHERE id = 1");
                         $stmt->execute([$nuevoNombre]);
                         $mensaje = "Imagen de fondo actualizada.";
@@ -90,6 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         elseif (isset($_POST['btn_del_hero_img'])) {
             $conn->query("UPDATE web_design_new_collection SET hero_image = '' WHERE id = 1");
+            eliminarImagenFisica($nc_datos['hero_image']); 
             $mensaje = "Imagen de fondo eliminada.";
         }
 

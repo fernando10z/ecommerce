@@ -78,13 +78,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // 1. GUARDADO GENERAL (Botón superior "Guardar Todo")
         if (isset($_POST['btn_guardar_global'])) {
+            $banner_visible = isset($_POST['banner_visible']) ? 1 : 0;
             $sql = "UPDATE web_design SET 
-                    logo_name = ?, primary_color = ?, secondary_color = ?, tertiary_color = ?, font_style = ?, top_banner_text = ?, footer_description = ? 
+                    logo_name = ?, primary_color = ?, secondary_color = ?, tertiary_color = ?, font_style = ?, top_banner_text = ?, banner_visible = ?, footer_description = ? 
                     WHERE id = 1";
             $stmt = $conn->prepare($sql);
             $stmt->execute([
                 $_POST['logo_name'], $_POST['primary_color'], $_POST['secondary_color'], 
-                $_POST['tertiary_color'], $_POST['font_style'], $_POST['top_banner_text'], $_POST['footer_description']
+                $_POST['tertiary_color'], $_POST['font_style'], $_POST['top_banner_text'], $banner_visible, $_POST['footer_description']
             ]);
             $mensaje_general = "¡Configuración general actualizada!";
         }
@@ -116,8 +117,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mensaje_general = "Fuente actualizada.";
         }
         elseif (isset($_POST['btn_save_banner'])) {
-            $conn->prepare("UPDATE web_design SET top_banner_text = ? WHERE id = 1")->execute([$_POST['top_banner_text']]);
-            $mensaje_general = "Banner superior actualizado.";
+            // 1. Capturamos si el ojo está activado o no
+            // (Si el checkbox llegó marcado es 1, si no llegó nada es 0)
+            $visible = isset($_POST['banner_visible']) ? 1 : 0;
+            $stmt = $conn->prepare("UPDATE web_design SET top_banner_text = ?, banner_visible = ? WHERE id = 1");
+            $stmt->execute([
+                $_POST['top_banner_text'], 
+                $visible
+            ]);
+            $mensaje_general = "Banner superior y visibilidad actualizados.";
         }
         elseif (isset($_POST['btn_save_footer_desc'])) {
             $conn->prepare("UPDATE web_design SET footer_description = ? WHERE id = 1")->execute([$_POST['footer_description']]);
