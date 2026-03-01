@@ -2,7 +2,7 @@
 //CARGA DE RECURSOS DEL SISTEMA (ANTES DE CUALQUIER HTML)
 require_once 'includes/auth-logic.php'; 
 require_once 'includes/config.php';     
-require_once __DIR__ . '/System/apariencia/design-config.php';
+require_once __DIR__ . '/System/system-configuration/design-config.php';
 
 
 // 1. OBTENER LA CONFIGURACIÓN ELEGIDA

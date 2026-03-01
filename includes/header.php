@@ -1,7 +1,7 @@
 <?php
 // NOTA: La lógica de sesión (auth-logic.php) debe cargarse en index.php, no aquí.
 global $pages;
-require_once __DIR__ . '/../System/apariencia/design-config.php';
+require_once __DIR__ . '/../System/system-configuration/design-config.php';
 ?>
 <header>
     <?php

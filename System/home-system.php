@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'conexion/conexion.php';
-require_once __DIR__ . '/apariencia/home-config.php';
+require_once __DIR__ . '/system-configuration/home-config.php';
 
 // Obtener datos de la organización
 $stmt = $conn->prepare("SELECT * FROM organizations LIMIT 1");

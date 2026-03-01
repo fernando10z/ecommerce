@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'conexion/conexion.php';
-require_once __DIR__ . '/apariencia/women-config.php';
+require_once __DIR__ . '/system-configuration/women-config.php';
 
 // Obtener datos de la organización
 $stmt = $conn->prepare("SELECT * FROM organizations LIMIT 1");
@@ -813,20 +813,31 @@ $usuario = [
                                             <div class="config-cell">
                                                 <div class="config-icon"><i class="fas fa-box"></i></div>
                                                 <div class="config-info">
-                                                    <div><?php echo htmlspecialchars($prod['nombre']); ?></div>
+                                                    <input type="text" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_name" value="<?php echo htmlspecialchars($prod['nombre']); ?>" required>
                                                     <div>ID: <?php echo $prod['id']; ?></div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><span class="badge badge-active"><?php echo htmlspecialchars($prod['marca']); ?></span></td>
-                                        <td><strong>$<?php echo number_format($prod['precio'], 2); ?></strong></td>
                                         <td>
-                                            <img src="../../<?php echo htmlspecialchars($prod['imagen']); ?>" style="width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
+                                            <input type="text" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_brand" value="<?php echo htmlspecialchars($prod['marca']); ?>" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" step="0.01" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_price" value="<?php echo htmlspecialchars($prod['precio']); ?>" required style="width: 100px;">
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                                <img src="../../<?php echo htmlspecialchars($prod['imagen']); ?>" style="width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
+                                                <input type="file" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_image" accept="image/*" style="padding: 0.2rem; font-size: 0.75rem;">
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="row-actions" style="justify-content: flex-end;">
-                                                <input type="hidden" name="del_id" form="del_form_<?php echo $prod['id']; ?>" value="<?php echo $prod['id']; ?>">
-                                                <button type="submit" form="del_form_<?php echo $prod['id']; ?>" name="btn_del_product" class="btn-action btn-reset" title="Borrar" style="color: #dc2626; background: #fee2e2;" onclick="return confirm('¿Eliminar este producto?')">
+                                                <button type="submit" form="form_edit_<?php echo $prod['id']; ?>" name="btn_update_product" class="btn-action btn-save" title="Actualizar" onclick="confirmarAccion(event, this)">
+                                                    <i class="fas fa-save"></i>
+                                                </button>
+
+                                                <input type="hidden" name="del_id" form="form_del_<?php echo $prod['id']; ?>" value="<?php echo $prod['id']; ?>">
+                                                <button type="submit" form="form_del_<?php echo $prod['id']; ?>" name="btn_del_product" class="btn-action btn-reset" title="Borrar" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -847,7 +858,10 @@ $usuario = [
             
             <?php if(isset($productos_list)): ?>
                 <?php foreach ($productos_list as $prod): ?>
-                    <form id="del_form_<?php echo $prod['id']; ?>" method="POST" style="display:none;"></form>
+                    <form id="form_edit_<?php echo $prod['id']; ?>" method="POST" enctype="multipart/form-data" style="display:none;">
+                        <input type="hidden" name="edit_id" value="<?php echo $prod['id']; ?>">
+                    </form>
+                    <form id="form_del_<?php echo $prod['id']; ?>" method="POST" style="display:none;"></form>
                 <?php endforeach; ?>
             <?php endif; ?>
 
