@@ -770,112 +770,60 @@ $usuario = [
                                     </td>
                                 </tr>
                             </tbody>
-                        </table>
+                            </table>
+                        </div>
                     </div>
-                </div>
-
-                <div class="card">                  
+                </form> <div class="card">                  
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th width="20%">Producto / Marca</th>
-                                    <th width="20%">Precios (Actual/Old)</th>
-                                    <th width="15%">Descuento</th>
-                                    <th width="25%">Imagen</th>
-                                    <th width="10%" style="text-align: right; padding-right: 1.5rem;">Acciones</th>
+                                    <th>Product Details</th>
+                                    <th>Original Price</th>
+                                    <th>Sale Price</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="background-color: #f9fafb; border-bottom: 2px solid #e5e7eb;">
-                                    <td>
-                                        <div class="config-cell">
-                                            <div class="config-icon"><i class="fas fa-plus"></i></div>
-                                            <div class="config-info">
-                                                <input type="text" class="table-input" name="prod_name" placeholder="Producto" required style="margin-bottom: 4px;">
-                                                <input type="text" class="table-input" name="prod_brand" placeholder="Marca" required>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="number" step="0.01" class="table-input" name="prod_price" placeholder="Oferta ($)" required style="margin-bottom: 4px; font-weight:bold;">
-                                        <input type="number" step="0.01" class="table-input" name="prod_old_price" placeholder="Antes ($)">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="table-input" name="prod_discount" placeholder="Ej: -50%">
-                                    </td>
-                                    <td>
-                                        <input type="file" class="table-input" name="prod_image" accept="image/*" required style="padding: 0.3rem;">
-                                    </td>
-                                    <td>
-                                        <div class="row-actions" style="justify-content: flex-end;">
-                                            <button type="submit" name="btn_save_product" class="btn-action btn-save" title="Agregar" onclick="confirmarAccion(event, this)">
-                                                <i class="fas fa-save"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <?php if (isset($productos_list) && count($productos_list) > 0): ?>
-                                        <?php foreach ($productos_list as $prod): ?>
+                                <?php if (!empty($productos_list)): ?>
+                                    <?php foreach ($productos_list as $product): ?>
                                         <tr>
                                             <td>
-                                                <div class="config-cell">
-                                                    <div class="config-icon"><i class="fas fa-tag"></i></div>
-                                                    <div class="config-info">
-                                                        <input type="text" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_name" value="<?php echo htmlspecialchars($prod['name']); ?>" required style="margin-bottom: 4px;">
-                                                        <input type="text" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_brand" value="<?php echo htmlspecialchars($prod['brand']); ?>" required>
-                                                        <div>ID: <?php echo $prod['id']; ?></div>
+                                                <div class="flex items-center gap-3">
+                                                    <?php if (!empty($product['image'])): ?>
+                                                        <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="Product" class="w-10 h-10 rounded-md object-cover border border-gray-200">
+                                                    <?php else: ?>
+                                                        <div class="w-10 h-10 rounded-md bg-gray-100 flex items-center justify-center text-gray-400 border border-gray-200">
+                                                            <i class="fas fa-image"></i>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                    <div>
+                                                        <div class="font-medium text-gray-900"><?php echo htmlspecialchars($product['name']); ?></div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <input type="number" step="0.01" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_price" value="<?php echo htmlspecialchars($prod['price']); ?>" required style="margin-bottom: 4px; font-weight:bold;">
-                                                <input type="number" step="0.01" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_old_price" value="<?php echo htmlspecialchars($prod['old_price'] ?? ''); ?>" placeholder="Antes ($)">
+                                            <td class="text-gray-400 line-through">
+                                                $<?php echo number_format($product['old_price'], 2); ?>
+                                            </td>
+                                            <td class="font-medium text-emerald-600">
+                                                $<?php echo number_format($product['price'], 2); ?>
                                             </td>
                                             <td>
-                                                <input type="text" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_discount" value="<?php echo htmlspecialchars($prod['discount'] ?? ''); ?>" placeholder="Ej: -50%" style="width: 80px;">
-                                            </td>
-                                            <td>
-                                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                                    <img src="../../<?php echo htmlspecialchars($prod['image']); ?>" style="width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-200);">
-                                                    <input type="file" form="form_edit_<?php echo $prod['id']; ?>" class="table-input" name="edit_prod_image" accept="image/*" style="padding: 0.2rem; font-size: 0.75rem;">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="row-actions" style="justify-content: flex-end;">
-                                                    <button type="submit" form="form_edit_<?php echo $prod['id']; ?>" name="btn_update_product" class="btn-action btn-save" title="Actualizar" onclick="confirmarAccion(event, this)">
-                                                        <i class="fas fa-save"></i>
-                                                    </button>
-
-                                                    <input type="hidden" name="del_id" form="form_del_<?php echo $prod['id']; ?>" value="<?php echo $prod['id']; ?>">
-                                                    <button type="submit" form="form_del_<?php echo $prod['id']; ?>" name="btn_del_product" class="btn-action btn-reset" title="Borrar oferta" style="color: #dc2626;" onclick="confirmarAccion(event, this)">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
+                                                <span class="px-2.5 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Active</span>
                                             </td>
                                         </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
                                     <tr>
-                                        <td colspan="5" style="text-align: center; padding: 2rem; color: var(--gray-500);">No hay ofertas registradas.</td>
+                                        <td colspan="4" class="text-center py-8 text-gray-500">
+                                            No products on sale found. Go to Global Products Inventory to add some.
+                                        </td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </form>
-            
-            <?php if(isset($productos_list)): ?>
-                <?php foreach ($productos_list as $prod): ?>
-                    <form id="form_edit_<?php echo $prod['id']; ?>" method="POST" enctype="multipart/form-data" style="display:none;">
-                        <input type="hidden" name="edit_id" value="<?php echo $prod['id']; ?>">
-                    </form>
-                    <form id="form_del_<?php echo $prod['id']; ?>" method="POST" style="display:none;"></form>
-                <?php endforeach; ?>
-            <?php endif; ?>
-
         </div>                                  
     </main>
     </div>

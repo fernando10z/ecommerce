@@ -7,7 +7,6 @@ $sqlDiseno = "SELECT * FROM web_design_men WHERE id = 1 LIMIT 1";
 $stmtD = $conn->query($sqlDiseno);
 $diseno = $stmtD->fetch(PDO::FETCH_ASSOC);
 
-// Valores por defecto por si la tabla está vacía
 $hero_img   = "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=1600&q=80";
 $hero_title = "Colección Hombre";
 $hero_sub   = "Estilo contemporáneo";
@@ -18,10 +17,20 @@ if ($diseno) {
     if (!empty($diseno['hero_subtitulo'])) { $hero_sub = $diseno['hero_subtitulo']; }
 }
 
-// 3. CONSULTAR PRODUCTOS (Tabla: web_design_men_products)
-$sqlProd = "SELECT * FROM web_design_men_products ORDER BY id DESC";
-$stmtP = $conn->query($sqlProd);
-$productos = $stmtP->fetchAll(PDO::FETCH_ASSOC);
+// 3. CONSULTAR PRODUCTOS (Corregido con las tablas de tu BD)
+try {
+    $sql = "SELECT p.id, p.name, p.base_price as price, pi.url as image
+            FROM products p
+            INNER JOIN product_category_map pcm ON p.id = pcm.product_id
+            INNER JOIN product_categories c ON pcm.category_id = c.id
+            LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = 1
+            WHERE (c.name = 'Hombre' OR c.slug IN ('hombre', 'men')) AND p.status = 'active'
+            ORDER BY p.created_at DESC";
+    $stmtP = $conn->query($sql);
+    $productos = $stmtP->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $productos = [];
+}
 ?>
 
 <section class="page-hero">
@@ -38,17 +47,17 @@ $productos = $stmtP->fetchAll(PDO::FETCH_ASSOC);
         <div class="products-grid">
             <?php if (!empty($productos)): ?>
                 <?php foreach ($productos as $producto): 
-                    $rutaImagen = "../" . $producto['imagen'];
+                    // Agregamos "System/" a la ruta para que apunte a la carpeta correcta
+                    $rutaImagen = !empty($producto['image']) ? "../System/" . $producto['image'] : "../System/images/default-product.jpg";
                 ?>
                 <div class="product-card">
                     <div class="product-image-wrapper">
-                        <img src="<?php echo htmlspecialchars($rutaImagen); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                        <img src="<?php echo htmlspecialchars($rutaImagen); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
                         <button class="quick-add">Agregar al carrito</button>
                     </div>
                     <div class="product-info">
-                        <p class="product-brand"><?php echo htmlspecialchars($producto['marca']); ?></p>
-                        <p class="product-name"><?php echo htmlspecialchars($producto['nombre']); ?></p>
-                        <p class="product-price">$<?php echo number_format($producto['precio'], 2); ?></p>
+                        <p class="product-name"><?php echo htmlspecialchars($producto['name']); ?></p>
+                        <p class="product-price">$<?php echo number_format($producto['price'], 2); ?></p>
                     </div>
                 </div>
                 <?php endforeach; ?>
