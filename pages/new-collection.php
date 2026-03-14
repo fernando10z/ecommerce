@@ -1,15 +1,10 @@
 <?php
-// ===============================
-// 1. CONEXIÓN A LA BASE DE DATOS
-// ===============================
-// Ajusta la ruta si es necesario según tu estructura de carpetas
+// Incluye el archivo de conexión a la base de datos para habilitar las consultas
 require_once __DIR__ . '/../System/conexion/conexion.php';
 
-// ===============================
-// 2. CONFIGURACIÓN VISUAL (TEXTOS HERO)
-// ===============================
 function obtenerConfiguracionNewColl($conn) {
     try {
+        // Consulta la configuración visual de la nueva colección limitando a un solo registro
         $sql = "SELECT * FROM web_design_new_collection WHERE id = 1 LIMIT 1";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -21,20 +16,17 @@ function obtenerConfiguracionNewColl($conn) {
 
 $config = obtenerConfiguracionNewColl($conn);
 
-// Textos por defecto (Fallback)
 $heroLabel    = $config['hero_label'] ?? 'Primavera/Verano';
 $heroTitle    = $config['hero_title'] ?? 'Nueva Colección';
 $heroSubtitle = $config['hero_subtitle'] ?? 'Piezas únicas para una nueva temporada';
 $prodLabel    = $config['prod_label'] ?? 'Nuevas llegadas';
 $prodTitle    = $config['prod_title'] ?? 'Lo más reciente';
 
-// ===============================
-// 3. LÓGICA DE IMAGEN HERO
-// ===============================
 $rutaWeb = 'images/new_collection/'; 
 $rutaFisicaBase = __DIR__ . '/../images/new_collection/';
 
 function validarImagenNC($nombreBD, $rutaFisica, $rutaWeb, $defaultUrl) {
+    // Verifica que el archivo de imagen exista físicamente antes de asignar su ruta web
     if (!empty($nombreBD) && file_exists($rutaFisica . $nombreBD)) {
         return $rutaWeb . $nombreBD;
     }
@@ -48,17 +40,22 @@ $heroImage = validarImagenNC(
     'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1600&q=80'
 );
 
-// ===============================
-// 4. CONSULTA UNIFICADA (MEN + WOMEN + SALE)
-// ===============================
-// Esta consulta une las 3 tablas, normaliza los nombres de columnas y ordena por fecha
+// Obtiene los 8 productos activos más recientes junto con su categoría y precio de oferta si aplica
 $sqlUnified = "
-    (SELECT id, nombre as name, marca as brand, precio as price, NULL as old_price, NULL as discount, imagen as image, 'men' as category, created_at FROM web_design_men_products)
-    UNION ALL
-    (SELECT id, nombre as name, marca as brand, precio as price, NULL as old_price, NULL as discount, imagen as image, 'women' as category, created_at FROM web_design_women_products)
-    UNION ALL
-    (SELECT id, name, brand, price, old_price, discount, image, 'sale' as category, created_at FROM web_design_sale_products)
-    ORDER BY created_at DESC
+    SELECT 
+        p.id, 
+        p.name, 
+        p.base_price as price, 
+        p.sale_price as current_sale_price,
+        p.created_at,
+        pi.url as image,
+        (SELECT name FROM product_categories cat 
+         JOIN product_category_map pcm ON cat.id = pcm.category_id 
+         WHERE pcm.product_id = p.id LIMIT 1) as category_name
+    FROM products p
+    LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = 1
+    WHERE p.status = 'active' AND p.visibility = 'visible'
+    ORDER BY p.created_at DESC
     LIMIT 8
 ";
 
@@ -68,7 +65,6 @@ try {
     $productosRecientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $productosRecientes = [];
-    // echo "Error: " . $e->getMessage(); // Descomentar para debug
 }
 ?>
 
@@ -97,55 +93,57 @@ try {
         <div class="products-grid">
             <?php if (count($productosRecientes) > 0): ?>
                 <?php foreach ($productosRecientes as $prod): 
-                    // Ajuste de ruta de imagen:
-                    // En la BD guardas 'images/men/foto.jpg'.
-                    // Si este archivo está dentro de una carpeta 'pages' o similar, necesitas salir con '../'
-                    // Si estás en la raíz, quita el '../' del inicio.
-                    $imgSrc = "../" . $prod['image']; 
+                
+                $imgSrc = !empty($prod['image']) ? "../" . $prod['image'] : "../images/default-product.jpg";
+                
+                // Determina si el producto está en oferta para definir el precio actual a mostrar y el original a tachar
+                $isSale = (!empty($prod['current_sale_price']) && $prod['current_sale_price'] > 0);
+                $displayPrice = $isSale ? $prod['current_sale_price'] : $prod['price'];
+                $oldPrice = $isSale ? $prod['price'] : null;
+
+                $dateCreated = new DateTime($prod['created_at']);
+                $now = new DateTime();
+                $diff = $now->diff($dateCreated)->days;
+
+                $badgeText = '';
+                $badgeClass = '';
+
+                // Asigna la etiqueta visual correspondiente priorizando las ofertas sobre los productos nuevos
+                if ($isSale) {
+                    $badgeText = 'Oferta';
+                    $badgeClass = 'sale';
+                } elseif ($diff <= 3) {
+                    $badgeText = 'Nuevo';
+                    $badgeClass = 'new';
+                }
+            ?>
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="<?= htmlspecialchars($imgSrc); ?>" 
+                        alt="<?= htmlspecialchars($prod['name']); ?>">
                     
-                    // Lógica de Badges
-                    $badgeText = '';
-                    $badgeClass = '';
+                    <?php if (!empty($badgeText)): ?>
+                        <span class="product-badge <?= $badgeClass; ?>"><?= htmlspecialchars($badgeText); ?></span>
+                    <?php endif; ?>
                     
-                    if ($prod['category'] === 'sale' && !empty($prod['discount'])) {
-                        $badgeText = $prod['discount'];
-                        $badgeClass = 'sale'; // Clase CSS roja usualmente
-                    } else {
-                        // Si es Men o Women, asumimos que es "Nuevo" porque está en esta lista de recientes
-                        $badgeText = 'Nuevo';
-                        $badgeClass = 'new'; // Clase CSS que deberías tener (ej. negra o azul)
-                    }
-                ?>
-                <div class="product-card">
-                    <div class="product-image-wrapper">
-                        <img src="<?= htmlspecialchars($imgSrc); ?>" 
-                             alt="<?= htmlspecialchars($prod['name']); ?>"
-                             onerror="this.src='https://via.placeholder.com/300x400?text=Sin+Imagen'">
-                        
-                        <?php if (!empty($badgeText)): ?>
-                            <span class="product-badge <?= $badgeClass; ?>"><?= htmlspecialchars($badgeText); ?></span>
-                        <?php endif; ?>
-                        
-                        <button class="quick-add">Ver Detalles</button>
-                    </div>
-                    
-                    <div class="product-info">
-                        <p class="product-brand"><?= htmlspecialchars($prod['brand']); ?></p>
-                        <p class="product-name"><?= htmlspecialchars($prod['name']); ?></p>
-                        <p class="product-price">
-                            $<?= number_format($prod['price'], 2); ?>
-                            
-                            <?php 
-                            // Solo mostramos precio anterior si existe y es mayor a 0 (Solo pasa en Sale)
-                            if (!empty($prod['old_price']) && $prod['old_price'] > 0): ?>
-                                <span class="old-price" style="text-decoration: line-through; color: #999; font-size: 0.9em; margin-left: 5px;">
-                                    $<?= number_format($prod['old_price'], 2); ?>
-                                </span>
-                            <?php endif; ?>
-                        </p>
-                    </div>
+                    <button class="quick-add">Ver Detalles</button>
                 </div>
-                <?php endforeach; ?>
+                
+                <div class="product-info">
+                    <p class="product-brand"><?= htmlspecialchars($prod['category_name'] ?? 'Colección'); ?></p>
+                    <p class="product-name"><?= htmlspecialchars($prod['name']); ?></p>
+                    <p class="product-price">
+                        $<?= number_format($displayPrice, 2); ?>
+                        
+                        <?php if ($oldPrice): ?>
+                            <span class="old-price" style="text-decoration: line-through; color: #999; font-size: 0.9em; margin-left: 5px;">
+                                $<?= number_format($oldPrice, 2); ?>
+                            </span>
+                        <?php endif; ?>
+                    </p>
+                </div>
+            </div>
+            <?php endforeach; ?>
             <?php else: ?>
                 <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
                     <p>Aún no hay productos recientes para mostrar.</p>

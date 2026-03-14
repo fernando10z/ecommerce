@@ -66,16 +66,18 @@ if (!function_exists('registrarAuditoria')) {
 
 function getSaleProducts($conn) {
     try {
-        $sql = "SELECT p.id, p.name, p.base_price as old_price, p.sale_price as price, pi.image_path as image 
+        $sql = "SELECT p.id, p.name, p.base_price, p.sale_price, pi.url as image 
                 FROM products p
-                INNER JOIN product_categories pc ON p.id = pc.product_id
-                INNER JOIN categories c ON pc.category_id = c.id
                 LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = 1
-                WHERE c.slug = 'sale' AND p.status = 'active'
+                WHERE p.sale_price IS NOT NULL AND p.sale_price > 0 AND p.status = 'active'
                 ORDER BY p.created_at DESC";
         $stmt = $conn->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-    } catch (PDOException $e) { return []; }
+    } catch (PDOException $e) { 
+        // Si hay un error SQL, lo registramos para poder depurar
+        error_log("Error en getSaleProducts: " . $e->getMessage());
+        return []; 
+    }
 }
 
 function getSaleDesign($conn) {

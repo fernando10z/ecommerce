@@ -106,7 +106,7 @@ if (isset($conn) && $conn instanceof PDO) {
         <div class="nav-section">
             <div class="nav-section-title">Ventas</div>
             <div class="nav-items">
-                <a href="productos.php" class="nav-item <?php echo basename($_SERVER['PHP_SELF']) === 'productos.php' ? 'active' : ''; ?>">
+                <a href="products.php" class="nav-item <?php echo basename($_SERVER['PHP_SELF']) === 'products.php' ? 'active' : ''; ?>">
                     <i class="nav-icon fas fa-cube"></i>
                     <span class="nav-label">Productos</span>
                 </a>

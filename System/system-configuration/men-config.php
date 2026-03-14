@@ -62,7 +62,7 @@ if (!function_exists('registrarAuditoria')) {
 
 function getMenProducts($conn) {
     try {
-        $sql = "SELECT p.id, p.name, p.base_price as price, pi.image_path as image, p.organization_id
+        $sql = "SELECT p.id, p.name, p.base_price, p.sale_price, pi.url as image, p.organization_id
                 FROM products p
                 INNER JOIN product_category_map pcm ON p.id = pcm.product_id
                 INNER JOIN product_categories c ON pcm.category_id = c.id
@@ -83,7 +83,7 @@ function getMenDesign($conn) {
 }
 
 // Initial Data Load
-$products_list = getMenProducts($conn);
+$productos_list = getMenProducts($conn);
 $design_data   = getMenDesign($conn);
 
 /* =====================================================
@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // --- REFRESH DATA ---
-        $products_list = getMenProducts($conn);
+        $productos_list = getMenProducts($conn);
         $design_data   = getMenDesign($conn);
 
     } catch (PDOException $e) {

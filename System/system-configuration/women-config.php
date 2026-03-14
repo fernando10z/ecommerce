@@ -62,7 +62,7 @@ if (!function_exists('registrarAuditoria')) {
 
 function getWomenProducts($conn) {
     try {
-        $sql = "SELECT p.id, p.name, p.base_price as price, pi.image_path as image 
+        $sql = "SELECT p.id, p.name, p.base_price, p.sale_price, pi.url as image 
                 FROM products p
                 INNER JOIN product_category_map pcm ON p.id = pcm.product_id
                 INNER JOIN product_categories c ON pcm.category_id = c.id
