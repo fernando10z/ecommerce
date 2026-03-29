@@ -28,6 +28,7 @@ try {
             WHERE (c.name = 'Mujer' OR c.slug IN ('mujer', 'women')) 
               AND p.status = 'active' 
               AND p.visibility IN ('visible', 'catalog')
+              AND p.is_active = 1
             ORDER BY p.created_at DESC";
     $stmtP = $conn->query($sql);
     $productos = $stmtP->fetchAll(PDO::FETCH_ASSOC);

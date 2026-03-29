@@ -54,7 +54,7 @@ $sqlUnified = "
          WHERE pcm.product_id = p.id LIMIT 1) as category_name
     FROM products p
     LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = 1
-    WHERE p.status = 'active' AND p.visibility = 'visible'
+    WHERE p.status = 'active' AND p.visibility = 'visible' AND p.is_active = 1
     ORDER BY p.created_at DESC
     LIMIT 8
 ";

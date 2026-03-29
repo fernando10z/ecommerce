@@ -28,6 +28,7 @@ try {
               AND p.sale_price < p.base_price 
               AND p.status = 'active' 
               AND p.visibility = 'visible'
+              AND p.is_active = 1
             ORDER BY p.created_at DESC";
     $stmtP = $conn->query($sql);
     $productosSale = $stmtP->fetchAll(PDO::FETCH_ASSOC);

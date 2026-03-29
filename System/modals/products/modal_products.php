@@ -80,11 +80,11 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-amber-700 uppercase">Start Date</label>
-                        <input type="datetime-local" name="sale_start_at" class="w-full p-2 border border-amber-200 rounded-lg text-sm">
+                        <input type="date" name="sale_start_at" min="<?php echo (new DateTime('now', new DateTimeZone('America/Lima')))->format('Y-m-d'); ?>" class="w-full p-2 border border-amber-200 rounded-lg text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-amber-700 uppercase">End Date</label>
-                        <input type="datetime-local" name="sale_end_at" class="w-full p-2 border border-amber-200 rounded-lg text-sm">
+                        <input type="date" name="sale_end_at" class="w-full p-2 border border-amber-200 rounded-lg text-sm">
                     </div>
                 </div>
             </div>

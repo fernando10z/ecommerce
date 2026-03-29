@@ -162,21 +162,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         elseif (isset($_POST['btn_delete_product'])) {
             $product_id = $_POST['del_id'];
             
-            // Elimina el archivo físico de la imagen y borra el producto junto a todas sus relaciones dependientes
-            $stmt_fetch = $conn->prepare("SELECT url FROM product_images WHERE product_id = ? AND is_primary = 1");
-            $stmt_fetch->execute([$product_id]);
-            $image_data = $stmt_fetch->fetch(PDO::FETCH_ASSOC);
+            // Eliminación Lógica: Cambiamos is_active a 0 en lugar de hacer un DELETE
+            $sql = "UPDATE products SET is_active = 0, updated_by = ? WHERE id = ?";
+            $conn->prepare($sql)->execute([$current_user_id, $product_id]);
             
-            if ($image_data && !empty($image_data['url'])) {
-                deletePhysicalImage($_SERVER['DOCUMENT_ROOT'] . '/ecommerce/' . $image_data['url']);
-            }
+            // Registramos la acción en tu auditoría
+            registerAudit($conn, $current_user_id, 'products', $product_id, 'soft_delete', ['is_active' => 1], ['is_active' => 0]);
             
-            $conn->prepare("DELETE FROM product_category_map WHERE product_id = ?")->execute([$product_id]);
-            $conn->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$product_id]);
-            $conn->prepare("DELETE FROM products WHERE id = ?")->execute([$product_id]);
-            
-            registerAudit($conn, $current_user_id, 'products', $product_id, 'delete', ['id' => $product_id], []);
-            $system_message = "Producto eliminado correctamente.";
+            $system_message = "Producto retirado del Frontend correctamente (mantenido en base de datos).";
         }
     } catch (PDOException $e) {
         if ($conn->inTransaction()) $conn->rollBack();
@@ -214,6 +207,21 @@ function getCategoriesList($conn, $org_id) {
 
 $categories_list = getCategoriesList($conn, $organization_id);
 $products_list = getAllProductsUnified($conn, $organization_id);
+
+// Procesamos los atributos de filtrado ANTES de llegar al HTML
+foreach ($products_list as &$product) {
+    $product['data_name'] = strtolower(htmlspecialchars($product['name']));
+    $product['data_sku'] = strtolower(htmlspecialchars($product['sku']));
+    $product['data_category'] = strtolower(htmlspecialchars($product['categories'] ?: 'uncategorized'));
+    
+    $product['data_status'] = 'activo';
+    if (isset($product['is_active']) && $product['is_active'] == '0') {
+        $product['data_status'] = 'eliminado';
+    } elseif ($product['status'] !== 'active') {
+        $product['data_status'] = 'inactivo';
+    }
+}
+unset($product); // Rompemos la referencia por seguridad
 
 $stmt = $conn->prepare("SELECT * FROM organizations LIMIT 1");
 $stmt->execute();
@@ -279,10 +287,19 @@ $usuario = [
                 <h1 class="text-2xl font-bold flex items-center gap-3">
                     <i class="fas fa-box-open text-emerald-600"></i> Inventario
                 </h1>
-                <button onclick="openProductModal(true)" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition flex items-center gap-2">
-                    <i class="fas fa-plus"></i> Agregar Producto
-                </button>
+                
+                <div class="flex gap-3">
+                    <button type="button" onclick="confirmarGeneracionReporte()" class="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-900 transition flex items-center gap-2">
+                        <i class="fas fa-file-invoice"></i> Generar Reporte
+                    </button>
+                    
+                    <button onclick="openProductModal(true)" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Agregar Producto
+                    </button>
+                </div>
             </div>
+            
+            <?php include 'includes/products_filters.php'; ?>
 
             <div class="card">
                 <div class="overflow-x-auto">
@@ -301,7 +318,11 @@ $usuario = [
                         </thead>
                         <tbody>
                             <?php foreach ($products_list as $product): ?>
-                                <tr>
+                                <tr class="product-row" 
+                                    data-name="<?php echo $product['data_name']; ?>" 
+                                    data-sku="<?php echo $product['data_sku']; ?>" 
+                                    data-category="<?php echo $product['data_category']; ?>" 
+                                    data-status="<?php echo $product['data_status']; ?>">
                                     <td>
                                         <div class="flex items-center gap-3">
                                             <img src="<?php echo $product['primary_image'] ? '../' . $product['primary_image'] : 'assets/images/no-image.png'; ?>" class="w-10 h-10 rounded-md object-cover border border-gray-200">
@@ -347,9 +368,15 @@ $usuario = [
                                     <td>$<?php echo number_format($product['base_price'], 2); ?></td>
                                     <td class="text-emerald-600 font-bold"><?php echo $product['sale_price'] ? '$'.number_format($product['sale_price'], 2) : '-'; ?></td>
                                     <td>
-                                        <span class="px-2 py-1 rounded-full text-xs font-medium <?php echo $product['status']==='active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'; ?>">
-                                            <?php echo $product['status'] === 'active' ? 'Activo' : 'Inactivo'; ?>
-                                        </span>
+                                        <?php if (isset($product['is_active']) && $product['is_active'] == '0'): ?>
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
+                                                <i class="fas fa-eye-slash mr-1"></i> Eliminado (Front)
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium <?php echo $product['status']==='active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'; ?>">
+                                                <?php echo $product['status'] === 'active' ? 'Activo' : ucfirst($product['status']); ?>
+                                            </span>
+                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <?php 
@@ -373,7 +400,7 @@ $usuario = [
                                             <button onclick="editProduct(<?php echo htmlspecialchars(json_encode($product)); ?>)" class="p-2 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition"><i class="fas fa-pen"></i></button>
                                             <form method="POST" class="inline">
                                                 <input type="hidden" name="del_id" value="<?php echo $product['id']; ?>">
-                                                <button type="button" name="btn_delete_product" title="Eliminar este producto" onclick="confirmarAccion(event, this)" class="p-2 bg-red-50 text-red-600 rounded hover:bg-red-100 transition"><i class="fas fa-trash-alt"></i></button>
+                                                <button type="button" name="btn_delete_product" title="Desea borrar este producto para el público" onclick="confirmarAccion(event, this)" class="p-2 bg-red-50 text-red-600 rounded hover:bg-red-100 transition"><i class="fas fa-trash-alt"></i></button>
                                             </form>
                                         </div>
                                     </td>
